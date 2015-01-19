@@ -26,9 +26,9 @@
 // DetectRTC.videoResolutions
 // DetectRTC.screenResolutions
 
-'use strict';
-
 (function() {
+    'use strict';
+    
     // detect node-webkit
     var browser = getBrowserInfo();
 
