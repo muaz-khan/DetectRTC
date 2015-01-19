@@ -44,6 +44,8 @@
     // detect node-webkit
     var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && window.process.versions && window.process.versions['node-webkit']);
 
+    var isHTTPs = location.protocol === 'https:';
+
     window.DetectRTC = {
         browser: browser,
         hasMicrophone: navigator.getMediaDevices || navigator.enumerateDevices ? false : 'unable to detect',
@@ -56,13 +58,18 @@
         isScreenCapturingSupported: (isFirefox && browser.version >= 33) ||
             (isChrome && browser.version >= 26 && (isNodeWebkit ? true : location.protocol === 'https:')),
 
-        isDesktopCapturingSupported: (isFirefox && browser.version >= 33) || (isChrome && browser.version >= 34) || isNodeWebkit || false,
+        isDesktopCapturingSupported: isHTTPs && ((isFirefox && browser.version >= 33) || (isChrome && browser.version >= 34) || isNodeWebkit || false),
 
         isSctpDataChannelsSupported: isFirefox || (isChrome && browser.version >= 25),
         isRtpDataChannelsSupported: isChrome && browser.version >= 31,
         isMobileDevice: !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i),
         isWebSocketsSupported: 'WebSocket' in window && 2 === window.WebSocket.CLOSING
     };
+
+    if (!isHTTPs) {
+        window.DetectRTC.isScreenCapturingSupported =
+            window.DetectRTC.isDesktopCapturingSupported = 'Requires HTTPs.';
+    }
 
     DetectRTC.browser = {
         isFirefox: isFirefox,
@@ -312,8 +319,13 @@
                 rtc.setLocalDescription(offerDesc);
             }, function(e) {
                 console.warn('offer failed', e);
+            }, {
+                mandatory: {
+                    OfferToReceiveAudio: false,
+                    OfferToReceiveVideo: false
+                },
+                optional: []
             });
-
 
             var addrs = Object.create(null);
             addrs['0.0.0.0'] = false;
@@ -334,15 +346,15 @@
             function grepSDP(sdp) {
                 var hosts = [],
                     parts, addr, type;
-                sdp.split('\r\n').forEach(function(line) { // c.f. http://tools.ietf.org/html/rfc4566#page-39
-                    if (~line.indexOf('a=candidate')) { // http://tools.ietf.org/html/rfc4566#section-5.13
-                        parts = line.split(' '); // http://tools.ietf.org/html/rfc5245#section-15.1
+                sdp.split('\r\n').forEach(function(line) {
+                    if (~line.indexOf('candidate:')) {
+                        parts = line.split(' ');
                         addr = parts[4];
                         type = parts[7];
                         if (type === 'host') {
                             updateDisplay(addr);
                         }
-                    } else if (~line.indexOf('c=')) { // http://tools.ietf.org/html/rfc4566#section-5.7
+                    } else if (~line.indexOf('c=')) {
                         parts = line.split(' ');
                         addr = parts[2];
                         updateDisplay(addr);
