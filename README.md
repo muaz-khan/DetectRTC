@@ -13,15 +13,16 @@ bower install detectrtc
 
 To use it:
 
-```htm
-<script src="./node_modules/detectrtc/DetectRTC.js"></script>
-```
-
-# Link the library
-
 ```html
+<script src="./node_modules/detectrtc/DetectRTC.js"></script>
+
+<!-- or CDN link -->
 <script src="//cdn.webrtc-experiment.com/DetectRTC.js"></script>
 ```
+
+**Check all releases:**
+
+* https://github.com/muaz-khan/DetectRTC/releases
 
 <img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
 
