@@ -1,10 +1,10 @@
-// Last time updated at Jan 19, 2015, 08:32:23
+// Last time updated at April 28, 2015, 08:32:23
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
 // Muaz Khan     - www.MuazKhan.com
 // MIT License   - www.WebRTC-Experiment.com/licence
-// Documentation - github.com/muaz-khan/WebRTC-Experiment/tree/master/DetectRTC
+// Documentation - github.com/muaz-khan/DetectRTC
 // ____________
 // DetectRTC.js
 
@@ -157,7 +157,12 @@
 
         DetectRTC.MediaDevices = [];
         navigator.getMediaDevices(function(devices) {
-            devices.forEach(function(device) {
+            devices.forEach(function(_device) {
+                var device = {};
+                for (var d in _device) {
+                    device[d] = _device[d];
+                }
+
                 var skip;
                 DetectRTC.MediaDevices.forEach(function(d) {
                     if (d.id === device.id) {
