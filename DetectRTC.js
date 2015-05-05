@@ -52,6 +52,14 @@
 
     var isHTTPs = location.protocol === 'https:';
 
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+        // Firefox 38+ seems having support of enumerateDevices
+        // Thanks @xdumaine/enumerateDevices
+        navigator.enumerateDevices = function(callback) {
+            navigator.mediaDevices.enumerateDevices().then(callback);
+        };
+    }
+
     window.DetectRTC = {
         browser: browser,
         hasMicrophone: navigator.getMediaDevices || navigator.enumerateDevices ? false : 'unable to detect',
@@ -128,15 +136,6 @@
     function CheckDeviceSupport(callback) {
         // This method is useful only for Chrome!
 
-        // Firefox seems having no support of enumerateDevices feature.
-        // Though there seems some clues of 'navigator.getMediaDevices' implementation.
-        if (isFirefox) {
-            if (callback) {
-                callback();
-            }
-            return;
-        }
-
         if (!navigator.getMediaDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
             navigator.getMediaDevices = window.MediaStreamTrack.getSources.bind(window.MediaStreamTrack);
         }
@@ -198,13 +197,7 @@
                 }
 
                 if (!device.label) {
-                    if (location.protocol === 'https:') {
-                        device.label = 'Please invoke getUserMedia once.';
-                    }
-
-                    if (location.protocol === 'http:') {
-                        device.label = 'Plese use HTTPs instead.';
-                    }
+                    device.label = 'Please invoke getUserMedia once.';
                 }
 
                 if (device.kind === 'audioinput' || device.kind === 'audio') {
