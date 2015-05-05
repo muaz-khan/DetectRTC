@@ -1,4 +1,4 @@
-// Last time updated at April 28, 2015, 08:32:23
+// Last time updated at May 05, 2015, 08:32:23
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -28,6 +28,12 @@
 
 (function() {
     'use strict';
+
+    function warn(log) {
+        if (window.console && typeof window.console.warn !== 'undefined') {
+            console.warn(log);
+        }
+    }
 
     // detect node-webkit
     var browser = getBrowserInfo();
@@ -106,15 +112,15 @@
     DetectRTC.MediaDevices = [];
 
     if (!navigator.getMediaDevices) {
-        console.warn('navigator.getMediaDevices API are not available.');
+        warn('navigator.getMediaDevices API are not available.');
     }
 
     if (!navigator.enumerateDevices) {
-        console.warn('navigator.enumerateDevices API are not available.');
+        warn('navigator.enumerateDevices API are not available.');
     }
 
     if (!window.MediaStreamTrack || !window.MediaStreamTrack.getSources) {
-        console.warn('MediaStreamTrack.getSources are not available.');
+        warn('MediaStreamTrack.getSources are not available.');
     }
 
     // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
@@ -141,7 +147,7 @@
 
         // if still no 'getMediaDevices'; it MUST be Firefox!
         if (!navigator.getMediaDevices) {
-            console.warn('navigator.getMediaDevices is undefined.');
+            warn('navigator.getMediaDevices is undefined.');
             // assuming that it is older chrome or chromium implementation
             if (isChrome) {
                 DetectRTC.hasMicrophone = true;
@@ -301,71 +307,107 @@
         };
     }
 
-    // via: http://net.ipcalf.com/
+    // via: https://github.com/diafygi/webrtc-ips
     DetectRTC.DetectLocalIPAddress = function(callback) {
-        var RTCPeerConnection = window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-
-        (function() {
-            var rtc = new RTCPeerConnection({
-                iceServers: []
-            });
-
-            rtc.createDataChannel('', {
-                reliable: false
-            });
-
-            rtc.onicecandidate = function(evt) {
-                if (evt.candidate) {
-                    grepSDP(evt.candidate.candidate);
-                }
-            };
-            rtc.createOffer(function(offerDesc) {
-                grepSDP(offerDesc.sdp);
-                rtc.setLocalDescription(offerDesc);
-            }, function(e) {
-                console.warn('offer failed', e);
-            }, {
-                mandatory: {
-                    OfferToReceiveAudio: false,
-                    OfferToReceiveVideo: false
-                },
-                optional: []
-            });
-
-            var addrs = Object.create(null);
-            addrs['0.0.0.0'] = false;
-
-            function updateDisplay(newAddr) {
-                if (newAddr in addrs) {
-                    return;
-                } else {
-                    addrs[newAddr] = true;
-                }
-
-                var displayAddrs = Object.keys(addrs).filter(function(k) {
-                    return addrs[k];
-                });
-                callback(displayAddrs.join(' or perhaps ') || 'n/a');
+        getIPs(function(ip) {
+            //local IPs
+            if (ip.match(/^(192\.168\.|169\.254\.|10\.|172\.(1[6-9]|2\d|3[01]))/)) {
+                callback('Local: ' + ip);
             }
 
-            function grepSDP(sdp) {
-                var hosts = [],
-                    parts, addr, type;
-                sdp.split('\r\n').forEach(function(line) {
-                    if (~line.indexOf('candidate:')) {
-                        parts = line.split(' ');
-                        addr = parts[4];
-                        type = parts[7];
-                        if (type === 'host') {
-                            updateDisplay(addr);
-                        }
-                    } else if (~line.indexOf('c=')) {
-                        parts = line.split(' ');
-                        addr = parts[2];
-                        updateDisplay(addr);
-                    }
-                });
+            //assume the rest are public IPs
+            else {
+                callback('Public: ' + ip);
             }
-        })();
+        });
     };
+
+    //get the IP addresses associated with an account
+    function getIPs(callback) {
+        var ipDuplicates = {};
+
+        //compatibility for firefox and chrome
+        var RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+        var useWebKit = !!window.webkitRTCPeerConnection;
+
+        // bypass naive webrtc blocking using an iframe
+        if (!RTCPeerConnection) {
+            var iframe = document.getElementById('iframe');
+            if (!iframe) {
+                //<iframe id="iframe" sandbox="allow-same-origin" style="display: none"></iframe>
+                throw 'NOTE: you need to have an iframe in the page right above the script tag.';
+            }
+            var win = iframe.contentWindow;
+            RTCPeerConnection = win.RTCPeerConnection || win.mozRTCPeerConnection || win.webkitRTCPeerConnection;
+            useWebKit = !!win.webkitRTCPeerConnection;
+        }
+
+        //minimal requirements for data connection
+        var mediaConstraints = {
+            optional: [{
+                RtpDataChannels: true
+            }]
+        };
+
+        //firefox already has a default stun server in about:config
+        //    media.peerconnection.default_iceservers =
+        //    [{"url": "stun:stun.services.mozilla.com"}]
+        var servers;
+
+        //add same stun server for chrome
+        if (useWebKit) {
+            servers = {
+                iceServers: [{
+                    urls: 'stun:stun.services.mozilla.com'
+                }]
+            };
+        }
+
+        //construct a new RTCPeerConnection
+        var pc = new RTCPeerConnection(servers, mediaConstraints);
+
+        function handleCandidate(candidate) {
+            //match just the IP address
+            var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
+            var ipAddress = ipRegex.exec(candidate)[1];
+
+            //remove duplicates
+            if (ipDuplicates[ipAddress] === undefined) {
+                callback(ipAddress);
+            }
+
+            ipDuplicates[ipAddress] = true;
+        }
+
+        //listen for candidate events
+        pc.onicecandidate = function(ice) {
+            //skip non-candidate events
+            if (ice.candidate) {
+                handleCandidate(ice.candidate.candidate);
+            }
+        };
+
+        //create a bogus data channel
+        pc.createDataChannel('');
+
+        //create an offer sdp
+        pc.createOffer(function(result) {
+
+            //trigger the stun server request
+            pc.setLocalDescription(result, function() {}, function() {});
+
+        }, function() {});
+
+        //wait for a while to let everything done
+        setTimeout(function() {
+            //read candidate info from local description
+            var lines = pc.localDescription.sdp.split('\n');
+
+            lines.forEach(function(line) {
+                if (line.indexOf('a=candidate:') === 0) {
+                    handleCandidate(line);
+                }
+            });
+        }, 1000);
+    }
 })();

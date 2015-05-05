@@ -63,7 +63,7 @@
         <article>
             <header style="text-align: center;">
                 <h1>
-                    <a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/DetectRTC">DetectRTC.js</a>: Detect <a href="https://www.webrtc-experiment.com/" target="_blank">WebRTC</a> features! ® 
+                    <a href="https://github.com/muaz-khan/DetectRTC">DetectRTC.js</a>: Detect <a href="https://www.webrtc-experiment.com/" target="_blank">WebRTC</a> features! ® 
                     <a href="https://github.com/muaz-khan" target="_blank">Muaz Khan</a>
                 </h1>            
                 <p>
@@ -78,10 +78,10 @@
                     <a href="https://github.com/muaz-khan?tab=repositories" target="_blank" title="Github Profile">Github</a>
                     
                     .
-                    <a href="https://github.com/muaz-khan/WebRTC-Experiment/issues?state=open" target="_blank">Latest issues</a>
+                    <a href="https://github.com/muaz-khan/DetectRTC/issues?state=open" target="_blank">Latest issues</a>
                     
                     .
-                    <a href="https://github.com/muaz-khan/WebRTC-Experiment/commits/master" target="_blank">What's New?</a>
+                    <a href="https://github.com/muaz-khan/DetectRTC/commits/master" target="_blank">What's New?</a>
                 </p>
             </header>
 
@@ -93,6 +93,9 @@
                 
                 <img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
             </section>
+            
+            <!-- dirty trick to bypass webrtc blockers -->
+            <iframe id="iframe" sandbox="allow-same-origin" style="display: none"></iframe>
             
             <script>
                 var browserFeaturesTable = document.querySelector('#browser-features');
@@ -141,7 +144,12 @@
                         appendTR(audioDevices.length + ' audio and ' + videoDevices.length + ' video devices', rightSide);
                         
                         DetectRTC.DetectLocalIPAddress(function(ipAddress) {
-                            appendTR('Your Local IP Address', ipAddress);
+                            if(ipAddress.indexOf('Local') !== -1) {
+                                appendTR('Your <strong>Local</strong> IP Address', ipAddress);
+                            }
+                            else {
+                                appendTR('Your <strong>Public</strong> IP Address', ipAddress);
+                            }
                         });
                     });
             </script>
