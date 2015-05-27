@@ -144,6 +144,9 @@
 
                     appendTR(audioDevices.length + ' audio and ' + videoDevices.length + ' video devices', rightSide);
 
+                    appendTR('Is Browser Supports Video Capturing from Canvas?', printVal(DetectRTC.isVideoCaptureStreamSupported));
+                    appendTR('Is Browser Supports Stream Capturing from Video?', printVal(DetectRTC.isVideoCaptureStreamSupported));
+
                     DetectRTC.DetectLocalIPAddress(function(ipAddress) {
                         if (ipAddress.indexOf('Local') !== -1) {
                             appendTR('Your <strong>Local</strong> IP Address', ipAddress);
