@@ -9,6 +9,9 @@ npm install detectrtc
 
 # or
 bower install detectrtc
+
+# you can test in localhost as well
+node server   # http://127.0.0.1:9001 or http://localhost:9001
 ```
 
 To use it:
@@ -44,16 +47,17 @@ DetectRTC.load(function() {
     
     // DetectRTC.osName
     
-    // DetectRTC.browser.name
+    // DetectRTC.browser.name === 'Edge' || 'Chrome' || 'Firefox'
     // DetectRTC.browser.version
     // DetectRTC.browser.isChrome
     // DetectRTC.browser.isFirefox
     // DetectRTC.browser.isOpera
     // DetectRTC.browser.isIE
     // DetectRTC.browser.isSafari
+    // DetectRTC.browser.isEdge
 
-    // isCanvasCaptureStreamSupported
-    // isVideoCaptureStreamSupported
+    // DetectRTC.isCanvasSupportsStreamCapturing
+    // DetectRTC.isVideoSupportsStreamCapturing
 
     // DetectRTC.DetectLocalIPAddress(callback)
 });
@@ -71,4 +75,4 @@ If you're not detecting audio/video input/outupt devices then you can skip this 
 
 # License
 
-[DetectRTC.js](https://github.com/muaz-khan/DetectRTC) is released under [MIT licence](https://www.webrtc-experiment.com/licence/) . Copyright (c) [Muaz Khan](https://plus.google.com/+MuazKhan).
+[DetectRTC.js](https://github.com/muaz-khan/DetectRTC) is released under [MIT licence](https://www.webrtc-experiment.com/licence/) . Copyright (c) [Muaz Khan](http://www.MuazKhan.com/).

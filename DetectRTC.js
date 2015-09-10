@@ -1,4 +1,4 @@
-// Last time updated at August 17, 2015, 08:32:23
+// Last time updated at Sep 10, 2015, 08:32:23
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -35,6 +35,8 @@
         }
     }
 
+    var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
+
     // detect node-webkit
     var browser = getBrowserInfo();
 
@@ -42,8 +44,8 @@
     var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     var isFirefox = typeof InstallTrigger !== 'undefined';
     var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-    var isChrome = !!window.chrome && !isOpera;
-    var isIE = !!document.documentMode;
+    var isChrome = !!window.chrome && !isOpera && !isEdge;
+    var isIE = !!document.documentMode && !isEdge;
 
     var isMobileDevice = !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i);
 
@@ -78,8 +80,8 @@
         isRtpDataChannelsSupported: isChrome && browser.version >= 31,
         isMobileDevice: !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i),
         isWebSocketsSupported: 'WebSocket' in window && 2 === window.WebSocket.CLOSING,
-        isCanvasCaptureStreamSupported: false,
-        isVideoCaptureStreamSupported: false
+        isCanvasSupportsStreamCapturing: false,
+        isVideoSupportsStreamCapturing: false
     };
 
     (function detectCanvasCaptureStream() {
@@ -87,22 +89,22 @@
         var canvas = document.createElement('canvas');
 
         if (typeof canvas.captureStream === 'function') {
-            DetectRTC.isCanvasCaptureStreamSupported = true;
+            DetectRTC.isCanvasSupportsStreamCapturing = true;
         } else if (typeof canvas.mozCaptureStream === 'function') {
-            DetectRTC.isCanvasCaptureStreamSupported = true;
+            DetectRTC.isCanvasSupportsStreamCapturing = true;
         } else if (typeof canvas.webkitCaptureStream === 'function') {
-            DetectRTC.isCanvasCaptureStreamSupported = true;
+            DetectRTC.isCanvasSupportsStreamCapturing = true;
         }
     })();
 
     (function detectVideoCaptureStream() {
         var video = document.createElement('video');
         if (typeof video.captureStream === 'function') {
-            DetectRTC.isVideoCaptureStreamSupported = true;
+            DetectRTC.isVideoSupportsStreamCapturing = true;
         } else if (typeof video.mozCaptureStream === 'function') {
-            DetectRTC.isVideoCaptureStreamSupported = true;
+            DetectRTC.isVideoSupportsStreamCapturing = true;
         } else if (typeof video.webkitCaptureStream === 'function') {
-            DetectRTC.isVideoCaptureStreamSupported = true;
+            DetectRTC.isVideoSupportsStreamCapturing = true;
         }
     })();
 
@@ -119,6 +121,7 @@
         isSafari: isSafari,
         isIE: isIE,
         isOpera: isOpera,
+        isEdge: isEdge,
         name: browser.name,
         version: browser.version
     };
@@ -289,6 +292,7 @@
             browserName = 'Firefox';
             fullVersion = nAgt.substring(verOffset + 8);
         }
+
         // In most other browsers, 'name/version' is at the end of userAgent 
         else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) < (verOffset = nAgt.lastIndexOf('/'))) {
             browserName = nAgt.substring(nameOffset, verOffset);
@@ -298,6 +302,12 @@
                 browserName = navigator.appName;
             }
         }
+
+        if (isEdge) {
+            browserName = 'Edge';
+            fullVersion = navigator.userAgent.split('Edge/')[1];
+        }
+
         // trim the fullVersion string at semicolon/space if present
         if ((ix = fullVersion.indexOf(';')) !== -1) {
             fullVersion = fullVersion.substring(0, ix);
