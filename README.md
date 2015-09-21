@@ -5,10 +5,11 @@
 # Proposed NEW API
 
 ```javascript
-DetectRTC.isSetSinkIdSupported
+DetectRTC.isSetSinkIdSupported // (implemented)
+DetectRTC.isRTPSenderReplaceTracksSupported // (implemented)
+DetectRTC.isORTCSupported // (implemented)
+
 DetectRTC.isRemoteStreamProcessingSupported
-DetectRTC.isRTPSenderReplaceTracksSupported
-DetectRTC.isOutputDevicesEnumerationSupported
 DetectRTC.isMediaDevicesNewSyntaxSupported
 DetectRTC.browser.googSupportedFlags.googDAEEchoCancellation
 DetecRTC.browser.googSupportedFlags.echoCancellation

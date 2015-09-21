@@ -1,4 +1,18 @@
-DetectRTC.MediaDevices = [];
+var MediaDevices = [];
+
+// ---------- Media Devices detection
+var canEnumerate = false;
+if(typeof MediaStreamTrack !== 'undefined') {
+    canEnumerate = true;
+}
+
+else if(navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
+    canEnumerate = true;
+}
+
+var hasMicrophone = canEnumerate;
+var hasSpeakers = canEnumerate;
+var hasWebcam = canEnumerate;
 
 // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
 // todo: switch to enumerateDevices when landed in canary.
@@ -14,21 +28,13 @@ function CheckDeviceSupport(callback) {
     }
 
     if (!navigator.enumerateDevices) {
-        warn('navigator.enumerateDevices is undefined.');
-        // assuming that it is older chrome or chromium implementation
-        if (isChrome) {
-            DetectRTC.hasMicrophone = true;
-            DetectRTC.hasSpeakers = true;
-            DetectRTC.hasWebcam = true;
-        }
-
         if (callback) {
             callback();
         }
         return;
     }
 
-    DetectRTC.MediaDevices = [];
+    MediaDevices = [];
     navigator.enumerateDevices(function(devices) {
         devices.forEach(function(_device) {
             var device = {};
@@ -37,7 +43,7 @@ function CheckDeviceSupport(callback) {
             }
 
             var skip;
-            DetectRTC.MediaDevices.forEach(function(d) {
+            MediaDevices.forEach(function(d) {
                 if (d.id === device.id) {
                     skip = true;
                 }
@@ -69,21 +75,28 @@ function CheckDeviceSupport(callback) {
             }
 
             if (device.kind === 'audioinput' || device.kind === 'audio') {
-                DetectRTC.hasMicrophone = true;
+                hasMicrophone = true;
             }
 
             if (device.kind === 'audiooutput') {
-                DetectRTC.hasSpeakers = true;
+                hasSpeakers = true;
             }
 
             if (device.kind === 'videoinput' || device.kind === 'video') {
-                DetectRTC.hasWebcam = true;
+                hasWebcam = true;
             }
 
             // there is no 'videoouput' in the spec.
 
-            DetectRTC.MediaDevices.push(device);
+            MediaDevices.push(device);
         });
+
+        if(typeof DetectRTC !== 'undefined') {
+            DetectRTC.MediaDevices = MediaDevices;
+            DetectRTC.hasMicrophone = MediaDevices;
+            DetectRTC.hasSpeakers = MediaDevices;
+            DetectRTC.hasWebcam = MediaDevices;
+        }
 
         if (callback) {
             callback();
@@ -93,4 +106,3 @@ function CheckDeviceSupport(callback) {
 
 // check for microphone/camera support!
 new CheckDeviceSupport();
-DetectRTC.load = CheckDeviceSupport;

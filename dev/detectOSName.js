@@ -1,11 +1,8 @@
-if(isMobile.any()) {
-    DetectRTC.osName = isMobile.getOsName();
-    return;
-}
-else 
-{
-    var osName = 'Unknown OS';
+var osName = 'Unknown OS';
 
+if(isMobile.any()) {
+    osName = isMobile.getOsName();}
+else {
     if (navigator.appVersion.indexOf('Win') !== -1) {
         osName = 'Windows';
     }
@@ -21,6 +18,4 @@ else
     if (navigator.appVersion.indexOf('Linux') !== -1) {
         osName = 'Linux';
     }
-
-    DetectRTC.osName = osName;
 }

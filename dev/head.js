@@ -25,3 +25,5 @@
 // ----------todo: add
 // DetectRTC.videoResolutions
 // DetectRTC.screenResolutions
+
+'use strict';

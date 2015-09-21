@@ -1,5 +1,5 @@
 // via: https://github.com/diafygi/webrtc-ips
-DetectRTC.DetectLocalIPAddress = function(callback) {
+function DetectLocalIPAddress(callback) {
     getIPs(function(ip) {
         //local IPs
         if (ip.match(/^(192\.168\.|169\.254\.|10\.|172\.(1[6-9]|2\d|3[01]))/)) {
@@ -11,7 +11,7 @@ DetectRTC.DetectLocalIPAddress = function(callback) {
             callback('Public: ' + ip);
         }
     });
-};
+}
 
 //get the IP addresses associated with an account
 function getIPs(callback) {
@@ -52,6 +52,12 @@ function getIPs(callback) {
                 urls: 'stun:stun.services.mozilla.com'
             }]
         };
+
+        if(typeof DetectRTC !== 'undefined' && DetectRTC.browser.isFirefox && DetectRTC.browser.version <= 38) {
+            servers[0] = {
+                url: servers[0].urls
+            };
+        }
     }
 
     //construct a new RTCPeerConnection
