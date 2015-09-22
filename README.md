@@ -8,13 +8,20 @@
 DetectRTC.isSetSinkIdSupported // (implemented)
 DetectRTC.isRTPSenderReplaceTracksSupported // (implemented)
 DetectRTC.isORTCSupported // (implemented)
+DetectRTC.isRemoteStreamProcessingSupported  // (implemented)
 
-DetectRTC.isRemoteStreamProcessingSupported
-DetectRTC.isMediaDevicesNewSyntaxSupported
 DetectRTC.browser.googSupportedFlags.googDAEEchoCancellation
 DetecRTC.browser.googSupportedFlags.echoCancellation
 DetectRTC.isMediaHintsSupportsNewSyntax
 ```
+
+# Test
+
+```javascript
+node server.js    // and open:   127.0.0.1:9001 or http://localhost:9001
+```
+
+<img src="https://i.imgur.com/YXehckT.jpg?1" />
 
 # Rules to Contribute
 

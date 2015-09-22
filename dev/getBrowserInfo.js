@@ -1,6 +1,9 @@
 var isMobileDevice = !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i);
 var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
 
+// this one can also be used:
+// https://www.websocket.org/js/stuff.js (DetectBrowser.js)
+
 function getBrowserInfo() {
     var nVer = navigator.appVersion;
     var nAgt = navigator.userAgent;

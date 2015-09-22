@@ -16,7 +16,7 @@ var hasWebcam = canEnumerate;
 
 // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
 // todo: switch to enumerateDevices when landed in canary.
-function CheckDeviceSupport(callback) {
+function checkDeviceSupport(callback) {
     // This method is useful only for Chrome!
 
     if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
@@ -72,6 +72,9 @@ function CheckDeviceSupport(callback) {
 
             if (!device.label) {
                 device.label = 'Please invoke getUserMedia once.';
+                if(!isHTTPs) {
+                    device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                }
             }
 
             if (device.kind === 'audioinput' || device.kind === 'audio') {
@@ -93,9 +96,9 @@ function CheckDeviceSupport(callback) {
 
         if(typeof DetectRTC !== 'undefined') {
             DetectRTC.MediaDevices = MediaDevices;
-            DetectRTC.hasMicrophone = MediaDevices;
-            DetectRTC.hasSpeakers = MediaDevices;
-            DetectRTC.hasWebcam = MediaDevices;
+            DetectRTC.hasMicrophone = hasMicrophone;
+            DetectRTC.hasSpeakers = hasSpeakers;
+            DetectRTC.hasWebcam = hasWebcam;
         }
 
         if (callback) {
@@ -105,4 +108,4 @@ function CheckDeviceSupport(callback) {
 }
 
 // check for microphone/camera support!
-new CheckDeviceSupport();
+checkDeviceSupport();

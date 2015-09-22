@@ -49,7 +49,12 @@ DetectRTC.isCreateMediaStreamSourceSupported = webAudio.isCreateMediaStreamSourc
 
 // ---------- Detect if SCTP/RTP channels are supported.
 
-DetectRTC.isRtpDataChannelsSupported = DetectRTC.browser.isChrome && DetectRTC.browser.version > 31;
+var isRtpDataChannelsSupported = false;
+if(DetectRTC.browser.isChrome && DetectRTC.browser.version > 31) {
+	isRtpDataChannelsSupported = true;
+}
+DetectRTC.isRtpDataChannelsSupported = isRtpDataChannelsSupported;
+
 var isSCTPSupportd = false;
 if(DetectRTC.browser.isFirefox && DetectRTC.browser.version > 28) {
 	isSCTPSupportd = true;
@@ -70,12 +75,20 @@ DetectRTC.isMobileDevice = isMobileDevice; // "isMobileDevice" boolean is define
 
 DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
 if(DetectRTC.isWebSocketsSupported) {
-	var websocket = new WebSocket('wss://test.com:443/');
+	var websocket = new WebSocket('wss://echo.websocket.org:443/');
 	websocket.onopen = function() {
 		DetectRTC.isWebSocketsBlocked = false;
+
+		if(DetectRTC.loadCallback) {
+			DetectRTC.loadCallback();
+		}
 	};
 	websocket.onerror = function() {
 		DetectRTC.isWebSocketsBlocked = true;
+
+		if(DetectRTC.loadCallback) {
+			DetectRTC.loadCallback();
+		}
 	};
 }
 
@@ -90,7 +103,7 @@ else if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
 if(DetectRTC.browser.isChrome && DetectRTC.browser.version >= 47 && !isHTTPs) {
 	DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
 }
-DetectRTC.isGetUserMediaSupported = false;
+DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
 
 // -----------
 DetectRTC.osName = osName; // "osName" is defined in "detectOSName.js"
@@ -103,12 +116,16 @@ DetectRTC.isVideoSupportsStreamCapturing = isVideoSupportsStreamCapturing;
 DetectRTC.DetectLocalIPAddress = DetectLocalIPAddress;
 
 // -------
-DetectRTC.load = CheckDeviceSupport;
+DetectRTC.load = function(callback) {
+    this.loadCallback = callback;
+
+    checkDeviceSupport(callback);
+};
 
 DetectRTC.MediaDevices = MediaDevices;
-DetectRTC.hasMicrophone = MediaDevices;
-DetectRTC.hasSpeakers = MediaDevices;
-DetectRTC.hasWebcam = MediaDevices;
+DetectRTC.hasMicrophone = hasMicrophone;
+DetectRTC.hasSpeakers = hasSpeakers;
+DetectRTC.hasWebcam = hasWebcam;
 
 // ------
 var isSetSinkIdSupported = false;
@@ -135,3 +152,10 @@ DetectRTC.isRTPSenderReplaceTracksSupported = isRTPSenderReplaceTracksSupported;
 
 //-------
 DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
+
+//------
+var isRemoteStreamProcessingSupported = false;
+if(DetectRTC.browser.isFirefox && DetectRTC.browser.version > 38) {
+	isRemoteStreamProcessingSupported = true;
+}
+DetectRTC.isRemoteStreamProcessingSupported = isRemoteStreamProcessingSupported;

@@ -36,8 +36,26 @@ if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
     };
 }
 
+if (typeof navigator !== 'undefined') {
+    if (typeof navigator.webkitGetUserMedia !== 'undefined') {
+        navigator.getUserMedia = navigator.webkitGetUserMedia;
+    }
+
+    if (typeof navigator.mozGetUserMedia !== 'undefined') {
+        navigator.getUserMedia = navigator.mozGetUserMedia;
+    }
+} else {
+    /*global navigator:true */
+    var navigator = {
+        getUserMedia: {}
+    };
+}
+
 var isMobileDevice = !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i);
 var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
+
+// this one can also be used:
+// https://www.websocket.org/js/stuff.js (DetectBrowser.js)
 
 function getBrowserInfo() {
     var nVer = navigator.appVersion;
@@ -339,7 +357,7 @@ var hasWebcam = canEnumerate;
 
 // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
 // todo: switch to enumerateDevices when landed in canary.
-function CheckDeviceSupport(callback) {
+function checkDeviceSupport(callback) {
     // This method is useful only for Chrome!
 
     if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
@@ -395,6 +413,9 @@ function CheckDeviceSupport(callback) {
 
             if (!device.label) {
                 device.label = 'Please invoke getUserMedia once.';
+                if (!isHTTPs) {
+                    device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                }
             }
 
             if (device.kind === 'audioinput' || device.kind === 'audio') {
@@ -416,9 +437,9 @@ function CheckDeviceSupport(callback) {
 
         if (typeof DetectRTC !== 'undefined') {
             DetectRTC.MediaDevices = MediaDevices;
-            DetectRTC.hasMicrophone = MediaDevices;
-            DetectRTC.hasSpeakers = MediaDevices;
-            DetectRTC.hasWebcam = MediaDevices;
+            DetectRTC.hasMicrophone = hasMicrophone;
+            DetectRTC.hasSpeakers = hasSpeakers;
+            DetectRTC.hasWebcam = hasWebcam;
         }
 
         if (callback) {
@@ -428,7 +449,7 @@ function CheckDeviceSupport(callback) {
 }
 
 // check for microphone/camera support!
-new CheckDeviceSupport();
+checkDeviceSupport();
 
 var DetectRTC = {};
 
@@ -480,7 +501,12 @@ DetectRTC.isCreateMediaStreamSourceSupported = webAudio.isCreateMediaStreamSourc
 
 // ---------- Detect if SCTP/RTP channels are supported.
 
-DetectRTC.isRtpDataChannelsSupported = DetectRTC.browser.isChrome && DetectRTC.browser.version > 31;
+var isRtpDataChannelsSupported = false;
+if (DetectRTC.browser.isChrome && DetectRTC.browser.version > 31) {
+    isRtpDataChannelsSupported = true;
+}
+DetectRTC.isRtpDataChannelsSupported = isRtpDataChannelsSupported;
+
 var isSCTPSupportd = false;
 if (DetectRTC.browser.isFirefox && DetectRTC.browser.version > 28) {
     isSCTPSupportd = true;
@@ -499,12 +525,20 @@ DetectRTC.isMobileDevice = isMobileDevice; // "isMobileDevice" boolean is define
 
 DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
 if (DetectRTC.isWebSocketsSupported) {
-    var websocket = new WebSocket('wss://test.com:443/');
+    var websocket = new WebSocket('wss://echo.websocket.org:443/');
     websocket.onopen = function() {
         DetectRTC.isWebSocketsBlocked = false;
+
+        if (DetectRTC.loadCallback) {
+            DetectRTC.loadCallback();
+        }
     };
     websocket.onerror = function() {
         DetectRTC.isWebSocketsBlocked = true;
+
+        if (DetectRTC.loadCallback) {
+            DetectRTC.loadCallback();
+        }
     };
 }
 
@@ -518,7 +552,7 @@ if (navigator.getUserMedia) {
 if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 47 && !isHTTPs) {
     DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
 }
-DetectRTC.isGetUserMediaSupported = false;
+DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
 
 // -----------
 DetectRTC.osName = osName; // "osName" is defined in "detectOSName.js"
@@ -531,12 +565,16 @@ DetectRTC.isVideoSupportsStreamCapturing = isVideoSupportsStreamCapturing;
 DetectRTC.DetectLocalIPAddress = DetectLocalIPAddress;
 
 // -------
-DetectRTC.load = CheckDeviceSupport;
+DetectRTC.load = function(callback) {
+    this.loadCallback = callback;
+
+    checkDeviceSupport(callback);
+};
 
 DetectRTC.MediaDevices = MediaDevices;
-DetectRTC.hasMicrophone = MediaDevices;
-DetectRTC.hasSpeakers = MediaDevices;
-DetectRTC.hasWebcam = MediaDevices;
+DetectRTC.hasMicrophone = hasMicrophone;
+DetectRTC.hasSpeakers = hasSpeakers;
+DetectRTC.hasWebcam = hasWebcam;
 
 // ------
 var isSetSinkIdSupported = false;
@@ -562,3 +600,10 @@ DetectRTC.isRTPSenderReplaceTracksSupported = isRTPSenderReplaceTracksSupported;
 
 //-------
 DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
+
+//------
+var isRemoteStreamProcessingSupported = false;
+if (DetectRTC.browser.isFirefox && DetectRTC.browser.version > 38) {
+    isRemoteStreamProcessingSupported = true;
+}
+DetectRTC.isRemoteStreamProcessingSupported = isRemoteStreamProcessingSupported;
