@@ -19,6 +19,9 @@ var isWebRTCSupported = false;
 });
 DetectRTC.isWebRTCSupported = isWebRTCSupported;
 
+//-------
+DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
+
 // --------- Detect if system supports screen capturing API
 var isScreenCapturingSupported = false;
 if(DetectRTC.browser.isChrome && DetectRTC.browser.version  >= 35) {
@@ -74,6 +77,8 @@ DetectRTC.isMobileDevice = isMobileDevice; // "isMobileDevice" boolean is define
 // ------
 
 DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
+DetectRTC.isWebSocketsBlocked = 'Checking';
+
 if(DetectRTC.isWebSocketsSupported) {
 	var websocket = new WebSocket('wss://echo.websocket.org:443/');
 	websocket.onopen = function() {
@@ -149,9 +154,6 @@ else if(DetectRTC.browser.isChrome) {
 	}
 }
 DetectRTC.isRTPSenderReplaceTracksSupported = isRTPSenderReplaceTracksSupported;
-
-//-------
-DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
 
 //------
 var isRemoteStreamProcessingSupported = false;

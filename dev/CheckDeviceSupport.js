@@ -2,7 +2,9 @@ var MediaDevices = [];
 
 // ---------- Media Devices detection
 var canEnumerate = false;
-if(typeof MediaStreamTrack !== 'undefined') {
+
+/*global MediaStreamTrack:true */
+if(typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
     canEnumerate = true;
 }
 

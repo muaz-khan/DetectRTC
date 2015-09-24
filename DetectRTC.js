@@ -1,4 +1,4 @@
-// Last time updated at Sep 21, 2015, 08:32:23
+// Last time updated at Sep 24, 2015, 08:32:23
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -11,20 +11,6 @@
 // DetectRTC.hasWebcam (has webcam device!)
 // DetectRTC.hasMicrophone (has microphone device!)
 // DetectRTC.hasSpeakers (has speakers!)
-// DetectRTC.isScreenCapturingSupported
-// DetectRTC.isSctpDataChannelsSupported
-// DetectRTC.isRtpDataChannelsSupported
-// DetectRTC.isAudioContextSupported
-// DetectRTC.isWebRTCSupported
-// DetectRTC.isDesktopCapturingSupported
-// DetectRTC.isMobileDevice
-// DetectRTC.isWebSocketsSupported
-
-// DetectRTC.DetectLocalIPAddress(callback)
-
-// ----------todo: add
-// DetectRTC.videoResolutions
-// DetectRTC.screenResolutions
 
 'use strict';
 
@@ -206,30 +192,17 @@ if (isMobile.any()) {
 
 
 var isCanvasSupportsStreamCapturing = false;
-(function detectCanvasCaptureStream() {
-    // latest Firefox nighly is supporting this "awesome" feature!
-    var canvas = document.createElement('canvas');
-
-    if (typeof canvas.captureStream === 'function') {
-        isCanvasSupportsStreamCapturing = true;
-    } else if (typeof canvas.mozCaptureStream === 'function') {
-        isCanvasSupportsStreamCapturing = true;
-    } else if (typeof canvas.webkitCaptureStream === 'function') {
-        isCanvasSupportsStreamCapturing = true;
-    }
-})();
-
 var isVideoSupportsStreamCapturing = false;
-(function detectVideoCaptureStream() {
-    var video = document.createElement('video');
-    if (typeof video.captureStream === 'function') {
-        isVideoSupportsStreamCapturing = true;
-    } else if (typeof video.mozCaptureStream === 'function') {
-        isVideoSupportsStreamCapturing = true;
-    } else if (typeof video.webkitCaptureStream === 'function') {
+['captureStream', 'mozCaptureStream', 'webkitCaptureStream'].forEach(function(item) {
+    // asdf
+    if (item in document.createElement('canvas')) {
+        isCanvasSupportsStreamCapturing = true;
+    }
+
+    if (item in document.createElement('video')) {
         isVideoSupportsStreamCapturing = true;
     }
-})();
+});
 
 // via: https://github.com/diafygi/webrtc-ips
 function DetectLocalIPAddress(callback) {
@@ -345,7 +318,9 @@ var MediaDevices = [];
 
 // ---------- Media Devices detection
 var canEnumerate = false;
-if (typeof MediaStreamTrack !== 'undefined') {
+
+/*global MediaStreamTrack:true */
+if (typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
     canEnumerate = true;
 } else if (navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
     canEnumerate = true;
@@ -472,6 +447,9 @@ var isWebRTCSupported = false;
 });
 DetectRTC.isWebRTCSupported = isWebRTCSupported;
 
+//-------
+DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
+
 // --------- Detect if system supports screen capturing API
 var isScreenCapturingSupported = false;
 if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 35) {
@@ -524,6 +502,8 @@ DetectRTC.isMobileDevice = isMobileDevice; // "isMobileDevice" boolean is define
 // ------
 
 DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
+DetectRTC.isWebSocketsBlocked = 'Checking';
+
 if (DetectRTC.isWebSocketsSupported) {
     var websocket = new WebSocket('wss://echo.websocket.org:443/');
     websocket.onopen = function() {
@@ -597,9 +577,6 @@ if (DetectRTC.browser.isFirefox /*&& DetectRTC.browser.version > 39*/ ) {
     }
 }
 DetectRTC.isRTPSenderReplaceTracksSupported = isRTPSenderReplaceTracksSupported;
-
-//-------
-DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
 
 //------
 var isRemoteStreamProcessingSupported = false;
