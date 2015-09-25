@@ -122,6 +122,8 @@
 
                     appendTR('Can you change output audio devices?', printVal(DetectRTC.isSetSinkIdSupported));
 
+                    appendTR('Can you change camera resolutions without making new getUserMedia request?', printVal(DetectRTC.isApplyConstraintsSupported));
+
                     appendTR('Browser Supports WebRTC (Either 1.0 or 1.1)?', printVal(DetectRTC.isWebRTCSupported));
                     appendTR('Browser Supports ORTC (WebRTC 1.1)?', printVal(DetectRTC.isORTCSupported));
 
@@ -136,6 +138,10 @@
                     appendTR('Browser Supports SCTP Data Channels?', printVal(DetectRTC.isSctpDataChannelsSupported));
                     appendTR('Browser Supports RTP Data Channels?', printVal(DetectRTC.isRtpDataChannelsSupported));
                     appendTR('This page Supports Screen Capturing API?', printVal(DetectRTC.isScreenCapturingSupported));
+
+                    appendTR('Is this browser supports multi-monitor selection & capturing screen of any monitor?', printVal(DetectRTC.isMultiMonitorScreenCapturingSupported));
+
+
                     appendTR('Is it a mobile device?', printVal(DetectRTC.isMobileDevice));
                     appendTR('Browser Supports WebSockets?', printVal(DetectRTC.isWebSocketsSupported));
 
