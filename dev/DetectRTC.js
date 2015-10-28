@@ -11,13 +11,9 @@ var isHTTPs = location.protocol === 'https:';
 var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && window.process.versions && window.process.versions['node-webkit']);
 
 // --------- Detect if system supports WebRTC 1.0 or WebRTC 1.1.
-var isWebRTCSupported = false;
-['webkitRTCPeerConnection', 'mozRTCPeerConnection', 'RTCIceGatherer'].forEach(function(item) {
-	if(item in window) {
-		isWebRTCSupported = true;
-	}
+DetectRTC.isWebRTCSupported = ['webkitRTCPeerConnection', 'mozRTCPeerConnection', 'RTCIceGatherer'].some(function(item) {
+	return item in window;
 });
-DetectRTC.isWebRTCSupported = isWebRTCSupported;
 
 //-------
 DetectRTC.isORTCSupported = typeof RTCIceGatherer !== 'undefined';
@@ -38,12 +34,13 @@ DetectRTC.isScreenCapturingSupported = isScreenCapturingSupported;
 
 // --------- Detect if WebAudio API are supported
 var webAudio = {};
-['AudioContext', 'webkitAudioContext', 'mozAudioContext', 'msAudioContext'].forEach(function(item) {
+['AudioContext', 'webkitAudioContext', 'mozAudioContext', 'msAudioContext'].some(function(item) {
 	if(item in window) {
 		webAudio.isSupported = true;
 
 		if('createMediaStreamSource' in window[item].prototype) {
 			webAudio.isCreateMediaStreamSourceSupported = true;
+			return true;
 		}
 	}
 });
