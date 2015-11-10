@@ -79,7 +79,7 @@ function checkDeviceSupport(callback) {
                 }
             }
 
-            if (device.kind === 'audioinput' || device.kind === 'audio') {
+            if (device.kind === 'audioinput') {
                 hasMicrophone = true;
             }
 
@@ -87,7 +87,7 @@ function checkDeviceSupport(callback) {
                 hasSpeakers = true;
             }
 
-            if (device.kind === 'videoinput' || device.kind === 'video') {
+            if (device.kind === 'videoinput') {
                 hasWebcam = true;
             }
 
