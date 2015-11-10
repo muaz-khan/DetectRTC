@@ -44,17 +44,6 @@ function checkDeviceSupport(callback) {
                 device[d] = _device[d];
             }
 
-            var skip;
-            MediaDevices.forEach(function(d) {
-                if (d.id === device.id) {
-                    skip = true;
-                }
-            });
-
-            if (skip) {
-                return;
-            }
-
             // if it is MediaStreamTrack.getSources
             if (device.kind === 'audio') {
                 device.kind = 'audioinput';
@@ -62,6 +51,17 @@ function checkDeviceSupport(callback) {
 
             if (device.kind === 'video') {
                 device.kind = 'videoinput';
+            }
+
+            var skip;
+            MediaDevices.forEach(function(d) {
+                if (d.id === device.id && d.kind === device.kind) {
+                    skip = true;
+                }
+            });
+
+            if (skip) {
+                return;
             }
 
             if (!device.deviceId) {
