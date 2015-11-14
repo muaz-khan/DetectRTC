@@ -466,6 +466,9 @@ DetectRTC.isScreenCapturingSupported = isScreenCapturingSupported;
 // --------- Detect if WebAudio API are supported
 var webAudio = {};
 ['AudioContext', 'webkitAudioContext', 'mozAudioContext', 'msAudioContext'].forEach(function(item) {
+    if (webAudio.isSupported && webAudio.isCreateMediaStreamSourceSupported) {
+        return;
+    }
     if (item in window) {
         webAudio.isSupported = true;
 
