@@ -1,4 +1,4 @@
-// Last time updated at Wednesday, November 11th, 2015, 9:32:12 AM 
+// Last time updated at Saturday, November 14th, 2015, 4:14:34 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -470,6 +470,9 @@
     // --------- Detect if WebAudio API are supported
     var webAudio = {};
     ['AudioContext', 'webkitAudioContext', 'mozAudioContext', 'msAudioContext'].forEach(function(item) {
+        if (webAudio.isSupported && webAudio.isCreateMediaStreamSourceSupported) {
+            return;
+        }
         if (item in window) {
             webAudio.isSupported = true;
 
