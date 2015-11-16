@@ -1,4 +1,4 @@
-// Last time updated at Saturday, November 14th, 2015, 4:14:34 PM 
+// Last time updated at Monday, November 16th, 2015, 9:04:34 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -519,6 +519,7 @@
             if (DetectRTC.loadCallback) {
                 DetectRTC.loadCallback();
             }
+            websocket.close();
         };
         websocket.onerror = function() {
             DetectRTC.isWebSocketsBlocked = true;
