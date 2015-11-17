@@ -90,6 +90,7 @@ if(DetectRTC.isWebSocketsSupported) {
 		if(DetectRTC.loadCallback) {
 			DetectRTC.loadCallback();
 		}
+		websocket.close();
 	};
 	websocket.onerror = function() {
 		DetectRTC.isWebSocketsBlocked = true;
