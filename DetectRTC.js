@@ -1,4 +1,4 @@
-// Last time updated at Sunday, November 29th, 2015, 8:01:08 PM 
+// Last time updated at Sunday, November 29th, 2015, 8:05:29 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -281,7 +281,12 @@
         function handleCandidate(candidate) {
             //match just the IP address
             var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            var ipAddress = ipRegex.exec(candidate)[1];
+            var match = ipRegex.exec(candidate);
+            if (!match) {
+                console.warn('Could not match IP address in', candidate);
+                return;
+            }
+            var ipAddress = match[1];
 
             //remove duplicates
             if (ipDuplicates[ipAddress] === undefined) {
