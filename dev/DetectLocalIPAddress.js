@@ -33,6 +33,11 @@ function getIPs(callback) {
         useWebKit = !!win.webkitRTCPeerConnection;
     }
 
+    // if still no RTCPeerConnection then it is not supported by the browser so just return
+    if (!RTCPeerConnection) {
+        return;
+    }
+	
     //minimal requirements for data connection
     var mediaConstraints = {
         optional: [{

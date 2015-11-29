@@ -1,4 +1,4 @@
-// Last time updated at Sunday, November 29th, 2015, 7:33:18 PM 
+// Last time updated at Sunday, November 29th, 2015, 8:01:08 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -241,6 +241,11 @@
             var win = iframe.contentWindow;
             RTCPeerConnection = win.RTCPeerConnection || win.mozRTCPeerConnection || win.webkitRTCPeerConnection;
             useWebKit = !!win.webkitRTCPeerConnection;
+        }
+
+        // if still no RTCPeerConnection then it is not supported by the browser so just return
+        if (!RTCPeerConnection) {
+            return;
         }
 
         //minimal requirements for data connection
