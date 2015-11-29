@@ -1,4 +1,4 @@
-// Last time updated at Monday, November 16th, 2015, 9:04:34 PM 
+// Last time updated at Sunday, November 29th, 2015, 7:33:18 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -101,7 +101,7 @@
         if (isEdge) {
             browserName = 'Edge';
             // fullVersion = navigator.userAgent.split('Edge/')[1];
-            fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10);
+            fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
         }
 
         // trim the fullVersion string at semicolon/space if present

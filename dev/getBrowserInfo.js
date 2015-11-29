@@ -59,7 +59,7 @@ function getBrowserInfo() {
     if (isEdge) {
         browserName = 'Edge';
         // fullVersion = navigator.userAgent.split('Edge/')[1];
-        fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10);
+        fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
     }
 
     // trim the fullVersion string at semicolon/space if present
