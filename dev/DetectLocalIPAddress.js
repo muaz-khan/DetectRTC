@@ -33,6 +33,11 @@ function getIPs(callback) {
         useWebKit = !!win.webkitRTCPeerConnection;
     }
 
+    // if still no RTCPeerConnection then it is not supported by the browser so just return
+    if (!RTCPeerConnection) {
+        return;
+    }
+	
     //minimal requirements for data connection
     var mediaConstraints = {
         optional: [{
@@ -66,8 +71,13 @@ function getIPs(callback) {
     function handleCandidate(candidate) {
         //match just the IP address
         var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-        var ipAddress = ipRegex.exec(candidate)[1];
-
+        var match = ipRegex.exec(candidate);
+        if (!match) {			
+            console.warn('Could not match IP address in', candidate);
+            return;
+        }
+        var ipAddress = match[1];
+		
         //remove duplicates
         if (ipDuplicates[ipAddress] === undefined) {
             callback(ipAddress);

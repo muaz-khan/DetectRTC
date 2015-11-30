@@ -1,4 +1,4 @@
-// Last time updated at Monday, November 16th, 2015, 9:04:34 PM 
+// Last time updated at Sunday, November 29th, 2015, 8:05:29 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -101,7 +101,7 @@
         if (isEdge) {
             browserName = 'Edge';
             // fullVersion = navigator.userAgent.split('Edge/')[1];
-            fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10);
+            fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
         }
 
         // trim the fullVersion string at semicolon/space if present
@@ -243,6 +243,11 @@
             useWebKit = !!win.webkitRTCPeerConnection;
         }
 
+        // if still no RTCPeerConnection then it is not supported by the browser so just return
+        if (!RTCPeerConnection) {
+            return;
+        }
+
         //minimal requirements for data connection
         var mediaConstraints = {
             optional: [{
@@ -276,7 +281,12 @@
         function handleCandidate(candidate) {
             //match just the IP address
             var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            var ipAddress = ipRegex.exec(candidate)[1];
+            var match = ipRegex.exec(candidate);
+            if (!match) {
+                console.warn('Could not match IP address in', candidate);
+                return;
+            }
+            var ipAddress = match[1];
 
             //remove duplicates
             if (ipDuplicates[ipAddress] === undefined) {
