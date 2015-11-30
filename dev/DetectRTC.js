@@ -12,7 +12,11 @@ var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && 
 
 // --------- Detect if system supports WebRTC 1.0 or WebRTC 1.1.
 var isWebRTCSupported = false;
-['webkitRTCPeerConnection', 'mozRTCPeerConnection', 'RTCIceGatherer'].forEach(function(item) {
+['RTCPeerConnection', 'webkitRTCPeerConnection', 'mozRTCPeerConnection', 'RTCIceGatherer'].forEach(function(item) {
+	if(isWebRTCSupported) {
+		return;
+	}
+
 	if(item in window) {
 		isWebRTCSupported = true;
 	}
@@ -37,11 +41,16 @@ if(!isHTTPs) {
 DetectRTC.isScreenCapturingSupported = isScreenCapturingSupported;
 
 // --------- Detect if WebAudio API are supported
-var webAudio = {};
+var webAudio = {
+	isSupported: false,
+	isCreateMediaStreamSourceSupported: false
+};
+
 ['AudioContext', 'webkitAudioContext', 'mozAudioContext', 'msAudioContext'].forEach(function(item) {
-	if (webAudio.isSupported && webAudio.isCreateMediaStreamSourceSupported) {
+	if (webAudio.isSupported) {
         return;
     }
+
 	if(item in window) {
 		webAudio.isSupported = true;
 
@@ -109,7 +118,7 @@ if(navigator.getUserMedia) {
 else if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
 	isGetUserMediaSupported = true;
 }
-if(DetectRTC.browser.isChrome && DetectRTC.browser.version >= 47 && !isHTTPs) {
+if(DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && !isHTTPs) {
 	DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
 }
 DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;

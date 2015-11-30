@@ -1,5 +1,13 @@
 // via: https://github.com/diafygi/webrtc-ips
 function DetectLocalIPAddress(callback) {
+    if(!DetectRTC.isWebRTCSupported) {
+        return;
+    }
+    
+    if(DetectRTC.isORTCSupported) {
+        return;
+    }
+
     getIPs(function(ip) {
         //local IPs
         if (ip.match(/^(192\.168\.|169\.254\.|10\.|172\.(1[6-9]|2\d|3[01]))/)) {
