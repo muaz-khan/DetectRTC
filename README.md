@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/detectrtc.svg)](https://npmjs.org/package/detectrtc) [![downloads](https://img.shields.io/npm/dm/detectrtc.svg)](https://npmjs.org/package/detectrtc)  [![Build Status: Linux](https://travis-ci.org/muaz-khan/DetectRTC.png?branch=master)](https://travis-ci.org/muaz-khan/DetectRTC)
 
+* [Check all DetectRTC releases](https://github.com/muaz-khan/DetectRTC/releases)
+
 A tiny JavaScript library that can be used to detect WebRTC features e.g. system having speakers, microphone or webcam, screen capturing is supported, number of audio/video devices etc.
 
 It is <a href="https://www.webrtc-experiment.com/licence/">MIT Licenced</a>, which means that you can use it in any commercial/non-commercial product, free of cost.
@@ -12,12 +14,6 @@ npm install detectrtc
 # or
 bower install detectrtc
 ```
-
-# Check all releases
-
-* https://github.com/muaz-khan/DetectRTC/releases
-
-Latest stable release is: [1.0.9](https://github.com/muaz-khan/DetectRTC/releases/tag/1.0.9)
 
 # Proposed NEW API
 
@@ -36,9 +32,9 @@ DetectRTC.isMediaHintsSupportsNewSyntax
 # Test in LocalHost
 
 ```javascript
-node server.js    
+node server.js
 
-// and open:   
+// and open:
 127.0.0.1:9001 
 
 // or 
@@ -51,7 +47,10 @@ To use it:
 <script src="./node_modules/detectrtc/DetectRTC.js"></script>
 
 <!-- or CDN link -->
-<script src="//cdn.webrtc-experiment.com/DetectRTC.js"></script>
+<script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
+
+<!-- or RawGit -->
+<script src="https://cdn.rawgit.com/muaz-khan/DetectRTC/master/DetectRTC.js"></script>
 ```
 
 <img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
