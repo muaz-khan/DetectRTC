@@ -12,13 +12,17 @@ else if(navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
     canEnumerate = true;
 }
 
-var hasMicrophone = canEnumerate;
-var hasSpeakers = canEnumerate;
-var hasWebcam = canEnumerate;
+var hasMicrophone = false;
+var hasSpeakers = false;
+var hasWebcam = false;
 
 // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
 // todo: switch to enumerateDevices when landed in canary.
 function checkDeviceSupport(callback) {
+    if(!canEnumerate) {
+        return;
+    }
+
     // This method is useful only for Chrome!
 
     if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
