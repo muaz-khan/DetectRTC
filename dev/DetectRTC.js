@@ -1,4 +1,4 @@
-var DetectRTC = {};
+var DetectRTC = window.DetectRTC || {};
 
 // ----------
 // DetectRTC.browser.name || DetectRTC.browser.version || DetectRTC.browser.fullVersion
@@ -7,7 +7,6 @@ DetectRTC.browser = getBrowserInfo();
 // DetectRTC.isChrome || DetectRTC.isFirefox || DetectRTC.isEdge
 DetectRTC.browser['is' + DetectRTC.browser.name] = true;
 
-var isHTTPs = location.protocol === 'https:';
 var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && window.process.versions && window.process.versions['node-webkit']);
 
 // --------- Detect if system supports WebRTC 1.0 or WebRTC 1.1.
@@ -35,7 +34,7 @@ else if(DetectRTC.browser.isFirefox && DetectRTC.browser.version >= 34) {
 	isScreenCapturingSupported = true;
 }
 
-if(!isHTTPs) {
+if(location.protocol !== 'https:') {
 	isScreenCapturingSupported = false;
 }
 DetectRTC.isScreenCapturingSupported = isScreenCapturingSupported;
@@ -100,6 +99,7 @@ if(DetectRTC.isWebSocketsSupported) {
 			DetectRTC.loadCallback();
 		}
 		websocket.close();
+		websocket = null;
 	};
 	websocket.onerror = function() {
 		DetectRTC.isWebSocketsBlocked = true;
@@ -118,7 +118,7 @@ if(navigator.getUserMedia) {
 else if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
 	isGetUserMediaSupported = true;
 }
-if(DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && !isHTTPs) {
+if(DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && location.protocol !== 'https:') {
 	DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
 }
 DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
@@ -144,6 +144,13 @@ DetectRTC.MediaDevices = MediaDevices;
 DetectRTC.hasMicrophone = hasMicrophone;
 DetectRTC.hasSpeakers = hasSpeakers;
 DetectRTC.hasWebcam = hasWebcam;
+
+DetectRTC.isWebsiteHasWebcamPermissions = isWebsiteHasWebcamPermissions;
+DetectRTC.isWebsiteHasMicrophonePermissions = isWebsiteHasMicrophonePermissions;
+
+DetectRTC.audioInputDevices = audioInputDevices;
+DetectRTC.audioOutputDevices = audioOutputDevices;
+DetectRTC.videoInputDevices = videoInputDevices;
 
 // ------
 var isSetSinkIdSupported = false;

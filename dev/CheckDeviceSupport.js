@@ -1,5 +1,17 @@
 var MediaDevices = [];
 
+var audioInputDevices = [];
+var audioOutputDevices = [];
+var videoInputDevices = [];
+
+if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+    // Firefox 38+ seems having support of enumerateDevices
+    // Thanks @xdumaine/enumerateDevices
+    navigator.enumerateDevices = function(callback) {
+        navigator.mediaDevices.enumerateDevices().then(callback);
+    };
+}
+
 // ---------- Media Devices detection
 var canEnumerate = false;
 
@@ -15,6 +27,9 @@ else if(navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
 var hasMicrophone = false;
 var hasSpeakers = false;
 var hasWebcam = false;
+
+var isWebsiteHasMicrophonePermissions = false;
+var isWebsiteHasWebcamPermissions = false;
 
 // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
 // todo: switch to enumerateDevices when landed in canary.
@@ -41,6 +56,11 @@ function checkDeviceSupport(callback) {
     }
 
     MediaDevices = [];
+
+    audioInputDevices = [];
+    audioOutputDevices = [];
+    videoInputDevices = [];
+
     navigator.enumerateDevices(function(devices) {
         devices.forEach(function(_device) {
             var device = {};
@@ -78,21 +98,32 @@ function checkDeviceSupport(callback) {
 
             if (!device.label) {
                 device.label = 'Please invoke getUserMedia once.';
-                if(!isHTTPs) {
+                if(location.protocol !== 'https:') {
                     device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                }
+            } else {
+                if (device.kind === 'videoinput' && !isWebsiteHasWebcamPermissions) {
+                    isWebsiteHasWebcamPermissions = true;
+                }
+
+                if (device.kind === 'audioinput' && !isWebsiteHasMicrophonePermissions) {
+                    isWebsiteHasMicrophonePermissions = true;
                 }
             }
 
             if (device.kind === 'audioinput') {
                 hasMicrophone = true;
+                audioInputDevices.push(device);
             }
 
             if (device.kind === 'audiooutput') {
                 hasSpeakers = true;
+                audioOutputDevices.push(device);
             }
 
             if (device.kind === 'videoinput') {
                 hasWebcam = true;
+                videoInputDevices.push(device);
             }
 
             // there is no 'videoouput' in the spec.
@@ -101,10 +132,18 @@ function checkDeviceSupport(callback) {
         });
 
         if(typeof DetectRTC !== 'undefined') {
+            // to sync latest outputs
             DetectRTC.MediaDevices = MediaDevices;
             DetectRTC.hasMicrophone = hasMicrophone;
             DetectRTC.hasSpeakers = hasSpeakers;
             DetectRTC.hasWebcam = hasWebcam;
+
+            DetectRTC.isWebsiteHasWebcamPermissions = isWebsiteHasWebcamPermissions;
+            DetectRTC.isWebsiteHasMicrophonePermissions = isWebsiteHasMicrophonePermissions;
+
+            DetectRTC.audioInputDevices = audioInputDevices;
+            DetectRTC.audioOutputDevices = audioOutputDevices;
+            DetectRTC.videoInputDevices = videoInputDevices;
         }
 
         if (callback) {

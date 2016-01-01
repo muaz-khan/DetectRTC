@@ -26,7 +26,7 @@ module.exports = function(grunt) {
                     'dev/detectOSName.js',
                     'dev/detectCaptureStream.js',
                     'dev/DetectLocalIPAddress.js',
-                    'dev/CheckDeviceSupport.js',
+                    'dev/checkDeviceSupport.js',
                     'dev/DetectRTC.js',
                     'dev/tail.js'
                 ],

@@ -1,4 +1,4 @@
-// Last time updated at Sunday, December 13th, 2015, 11:10:15 AM 
+// Last time updated at Friday, January 1st, 2016, 5:04:28 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -17,14 +17,6 @@
     'use strict';
 
     var navigator = window.navigator;
-
-    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-        // Firefox 38+ seems having support of enumerateDevices
-        // Thanks @xdumaine/enumerateDevices
-        navigator.enumerateDevices = function(callback) {
-            navigator.mediaDevices.enumerateDevices().then(callback);
-        };
-    }
 
     if (typeof navigator !== 'undefined') {
         if (typeof navigator.webkitGetUserMedia !== 'undefined') {
@@ -338,6 +330,18 @@
 
     var MediaDevices = [];
 
+    var audioInputDevices = [];
+    var audioOutputDevices = [];
+    var videoInputDevices = [];
+
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+        // Firefox 38+ seems having support of enumerateDevices
+        // Thanks @xdumaine/enumerateDevices
+        navigator.enumerateDevices = function(callback) {
+            navigator.mediaDevices.enumerateDevices().then(callback);
+        };
+    }
+
     // ---------- Media Devices detection
     var canEnumerate = false;
 
@@ -351,6 +355,9 @@
     var hasMicrophone = false;
     var hasSpeakers = false;
     var hasWebcam = false;
+
+    var isWebsiteHasMicrophonePermissions = false;
+    var isWebsiteHasWebcamPermissions = false;
 
     // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
     // todo: switch to enumerateDevices when landed in canary.
@@ -377,6 +384,11 @@
         }
 
         MediaDevices = [];
+
+        audioInputDevices = [];
+        audioOutputDevices = [];
+        videoInputDevices = [];
+
         navigator.enumerateDevices(function(devices) {
             devices.forEach(function(_device) {
                 var device = {};
@@ -414,21 +426,32 @@
 
                 if (!device.label) {
                     device.label = 'Please invoke getUserMedia once.';
-                    if (!isHTTPs) {
+                    if (location.protocol !== 'https:') {
                         device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                    }
+                } else {
+                    if (device.kind === 'videoinput' && !isWebsiteHasWebcamPermissions) {
+                        isWebsiteHasWebcamPermissions = true;
+                    }
+
+                    if (device.kind === 'audioinput' && !isWebsiteHasMicrophonePermissions) {
+                        isWebsiteHasMicrophonePermissions = true;
                     }
                 }
 
                 if (device.kind === 'audioinput') {
                     hasMicrophone = true;
+                    audioInputDevices.push(device);
                 }
 
                 if (device.kind === 'audiooutput') {
                     hasSpeakers = true;
+                    audioOutputDevices.push(device);
                 }
 
                 if (device.kind === 'videoinput') {
                     hasWebcam = true;
+                    videoInputDevices.push(device);
                 }
 
                 // there is no 'videoouput' in the spec.
@@ -437,10 +460,18 @@
             });
 
             if (typeof DetectRTC !== 'undefined') {
+                // to sync latest outputs
                 DetectRTC.MediaDevices = MediaDevices;
                 DetectRTC.hasMicrophone = hasMicrophone;
                 DetectRTC.hasSpeakers = hasSpeakers;
                 DetectRTC.hasWebcam = hasWebcam;
+
+                DetectRTC.isWebsiteHasWebcamPermissions = isWebsiteHasWebcamPermissions;
+                DetectRTC.isWebsiteHasMicrophonePermissions = isWebsiteHasMicrophonePermissions;
+
+                DetectRTC.audioInputDevices = audioInputDevices;
+                DetectRTC.audioOutputDevices = audioOutputDevices;
+                DetectRTC.videoInputDevices = videoInputDevices;
             }
 
             if (callback) {
@@ -452,7 +483,7 @@
     // check for microphone/camera support!
     checkDeviceSupport();
 
-    var DetectRTC = {};
+    var DetectRTC = window.DetectRTC || {};
 
     // ----------
     // DetectRTC.browser.name || DetectRTC.browser.version || DetectRTC.browser.fullVersion
@@ -461,7 +492,6 @@
     // DetectRTC.isChrome || DetectRTC.isFirefox || DetectRTC.isEdge
     DetectRTC.browser['is' + DetectRTC.browser.name] = true;
 
-    var isHTTPs = location.protocol === 'https:';
     var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && window.process.versions && window.process.versions['node-webkit']);
 
     // --------- Detect if system supports WebRTC 1.0 or WebRTC 1.1.
@@ -488,7 +518,7 @@
         isScreenCapturingSupported = true;
     }
 
-    if (!isHTTPs) {
+    if (location.protocol !== 'https:') {
         isScreenCapturingSupported = false;
     }
     DetectRTC.isScreenCapturingSupported = isScreenCapturingSupported;
@@ -551,6 +581,7 @@
                 DetectRTC.loadCallback();
             }
             websocket.close();
+            websocket = null;
         };
         websocket.onerror = function() {
             DetectRTC.isWebSocketsBlocked = true;
@@ -568,7 +599,7 @@
     } else if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         isGetUserMediaSupported = true;
     }
-    if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && !isHTTPs) {
+    if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && location.protocol !== 'https:') {
         DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
     }
     DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
@@ -594,6 +625,13 @@
     DetectRTC.hasMicrophone = hasMicrophone;
     DetectRTC.hasSpeakers = hasSpeakers;
     DetectRTC.hasWebcam = hasWebcam;
+
+    DetectRTC.isWebsiteHasWebcamPermissions = isWebsiteHasWebcamPermissions;
+    DetectRTC.isWebsiteHasMicrophonePermissions = isWebsiteHasMicrophonePermissions;
+
+    DetectRTC.audioInputDevices = audioInputDevices;
+    DetectRTC.audioOutputDevices = audioOutputDevices;
+    DetectRTC.videoInputDevices = videoInputDevices;
 
     // ------
     var isSetSinkIdSupported = false;

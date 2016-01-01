@@ -55,7 +55,10 @@
             document.createElement('footer');
         </script>
         
-        <!-- script used to detect WebRTC features! -->
+        <!-- 
+            Script used to detect WebRTC features!
+            https://github.com/muaz-khan/DetectRTC#how-to-link
+        -->
         <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script>
         <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
     </head>
@@ -87,6 +90,16 @@
             </header>
 
             <div class="github-stargazers"></div>
+
+            <div style="text-align:center;">
+                <a href="https://www.npmjs.com/package/detectrtc" target="_blank">
+                    <img src="https://img.shields.io/npm/v/detectrtc.svg">
+                </a>
+
+                <a href="https://www.npmjs.com/package/detectrtc" target="_blank">
+                    <img src="https://img.shields.io/npm/dm/detectrtc.svg">
+                </a>
+            </div>
             
             <section class="experiment" id="detectrtc-output">
                 <button id="save" style="float:right;">Print & Save As Image</button>
@@ -117,6 +130,8 @@
                     appendTR('System has Microphone?', printVal(DetectRTC.hasMicrophone));
                     appendTR('System has Webcam?', printVal(DetectRTC.hasWebcam));
 
+                    appendTR('Website has webcam permissions?', printVal(DetectRTC.isWebsiteHasWebcamPermissions));
+                    appendTR('Website has mcirophone permissions?', printVal(DetectRTC.isWebsiteHasMicrophonePermissions));
                     
                     appendTR('Browser allows getUserMedia on this page?', printVal(DetectRTC.isGetUserMediaSupported));
 
@@ -148,6 +163,8 @@
                     document.getElementById('welcome').innerHTML = DetectRTC.osName + ': ' + DetectRTC.browser.name + ' (version: ' + DetectRTC.browser.version + ')';
 
                     var rightSide = '';
+
+                    // you can even use "DetectRTC.audioInputDevices", "audioOutputDevices" and "videoInputDevices"
                     var audioDevices = [];
                     var videoDevices = [];
                     DetectRTC.MediaDevices.forEach(function(device) {
@@ -273,7 +290,7 @@
                 <h2 class="header">
                     How to use <a href="https://github.com/muaz-khan/DetectRTC" target="_blank">DetectRTC</a>?</h2>
                 <pre>
-&lt;script src="//cdn.WebRTC-Experiment.com/DetectRTC.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.WebRTC-Experiment.com/DetectRTC.js"&gt;&lt;/script&gt;
 </pre>
             </section>
             <section class="experiment">
@@ -281,6 +298,8 @@
 DetectRTC.load(function() {
     // DetectRTC.hasWebcam (has webcam device!)
     // DetectRTC.hasMicrophone (has microphone device!)
+    // DetectRTC.isWebsiteHasWebcamPermissions
+    // DetectRTC.isWebsiteHasMicrophonePermissions
     // DetectRTC.hasSpeakers (has speakers!)
     // DetectRTC.isScreenCapturingSupported
     // DetectRTC.isSctpDataChannelsSupported
@@ -290,6 +309,11 @@ DetectRTC.load(function() {
     // DetectRTC.isDesktopCapturingSupported
     // DetectRTC.isMobileDevice
     // DetectRTC.isWebSocketsSupported
+
+    // DetectRTC.audioInputDevices       --- microphones
+    // DetectRTC.audioOutputDevices      --- speakers
+    // DetectRTC.videoInputDevices       --- cameras
+    // DetectRTC.MediaDevices            --- all devices
     
     // DetectRTC.osName
     
