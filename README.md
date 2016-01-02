@@ -69,17 +69,17 @@ http://localhost:9001
 
 ```javascript
 DetectRTC.load(function() {
-    // DetectRTC.hasWebcam (has webcam device!)
-    // DetectRTC.hasMicrophone (has microphone device!)
-    // DetectRTC.hasSpeakers (has speakers!)
-    // DetectRTC.isScreenCapturingSupported
-    // DetectRTC.isSctpDataChannelsSupported
-    // DetectRTC.isRtpDataChannelsSupported
-    // DetectRTC.isAudioContextSupported
-    // DetectRTC.isWebRTCSupported
-    // DetectRTC.isDesktopCapturingSupported
-    // DetectRTC.isMobileDevice
-    // DetectRTC.isWebSocketsSupported
+    DetectRTC.hasWebcam (has webcam device!)
+    DetectRTC.hasMicrophone (has microphone device!)
+    DetectRTC.hasSpeakers (has speakers!)
+    DetectRTC.isScreenCapturingSupported
+    DetectRTC.isSctpDataChannelsSupported
+    DetectRTC.isRtpDataChannelsSupported
+    DetectRTC.isAudioContextSupported
+    DetectRTC.isWebRTCSupported
+    DetectRTC.isDesktopCapturingSupported
+    DetectRTC.isMobileDevice
+    DetectRTC.isWebSocketsSupported
 
     DetectRTC.isWebsiteHasWebcamPermissions        // getUserMedia allowed for HTTPs domain in Chrome?
     DetectRTC.isWebsiteHasMicrophonePermissions    // getUserMedia allowed for HTTPs domain in Chrome?
@@ -88,21 +88,24 @@ DetectRTC.load(function() {
     DetectRTC.audioOutputDevices   // speakers
     DetectRTC.videoInputDevices    // cameras
     
-    // DetectRTC.osName
+    DetectRTC.osName
+    DetectRTC.osVersion
     
-    // DetectRTC.browser.name === 'Edge' || 'Chrome' || 'Firefox'
-    // DetectRTC.browser.version
-    // DetectRTC.browser.isChrome
-    // DetectRTC.browser.isFirefox
-    // DetectRTC.browser.isOpera
-    // DetectRTC.browser.isIE
-    // DetectRTC.browser.isSafari
-    // DetectRTC.browser.isEdge
+    DetectRTC.browser.name === 'Edge' || 'Chrome' || 'Firefox'
+    DetectRTC.browser.version
+    DetectRTC.browser.isChrome
+    DetectRTC.browser.isFirefox
+    DetectRTC.browser.isOpera
+    DetectRTC.browser.isIE
+    DetectRTC.browser.isSafari
+    DetectRTC.browser.isEdge
 
-    // DetectRTC.isCanvasSupportsStreamCapturing
-    // DetectRTC.isVideoSupportsStreamCapturing
+    DetectRTC.browser.isPrivateBrowsing // incognito or private modes
 
-    // DetectRTC.DetectLocalIPAddress(callback)
+    DetectRTC.isCanvasSupportsStreamCapturing
+    DetectRTC.isVideoSupportsStreamCapturing
+
+    DetectRTC.DetectLocalIPAddress(callback)
 });
 ```
 

@@ -1,10 +1,10 @@
 // via: https://github.com/diafygi/webrtc-ips
 function DetectLocalIPAddress(callback) {
-    if(!DetectRTC.isWebRTCSupported) {
+    if (!DetectRTC.isWebRTCSupported) {
         return;
     }
-    
-    if(DetectRTC.isORTCSupported) {
+
+    if (DetectRTC.isORTCSupported) {
         return;
     }
 
@@ -45,7 +45,7 @@ function getIPs(callback) {
     if (!RTCPeerConnection) {
         return;
     }
-	
+
     //minimal requirements for data connection
     var mediaConstraints = {
         optional: [{
@@ -66,7 +66,7 @@ function getIPs(callback) {
             }]
         };
 
-        if(typeof DetectRTC !== 'undefined' && DetectRTC.browser.isFirefox && DetectRTC.browser.version <= 38) {
+        if (typeof DetectRTC !== 'undefined' && DetectRTC.browser.isFirefox && DetectRTC.browser.version <= 38) {
             servers[0] = {
                 url: servers[0].urls
             };
@@ -80,12 +80,12 @@ function getIPs(callback) {
         //match just the IP address
         var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
         var match = ipRegex.exec(candidate);
-        if (!match) {			
+        if (!match) {
             console.warn('Could not match IP address in', candidate);
             return;
         }
         var ipAddress = match[1];
-		
+
         //remove duplicates
         if (ipDuplicates[ipAddress] === undefined) {
             callback(ipAddress);

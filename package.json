@@ -1,7 +1,7 @@
 {
     "name": "detectrtc",
     "preferGlobal": true,
-    "version": "1.2.4",
+    "version": "1.2.5",
     "author": {
         "name": "Muaz Khan",
         "email": "muazkh@gmail.com",

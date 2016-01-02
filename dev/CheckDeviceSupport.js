@@ -16,11 +16,9 @@ if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
 var canEnumerate = false;
 
 /*global MediaStreamTrack:true */
-if(typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
+if (typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
     canEnumerate = true;
-}
-
-else if(navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
+} else if (navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
     canEnumerate = true;
 }
 
@@ -34,7 +32,7 @@ var isWebsiteHasWebcamPermissions = false;
 // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
 // todo: switch to enumerateDevices when landed in canary.
 function checkDeviceSupport(callback) {
-    if(!canEnumerate) {
+    if (!canEnumerate) {
         return;
     }
 
@@ -98,7 +96,7 @@ function checkDeviceSupport(callback) {
 
             if (!device.label) {
                 device.label = 'Please invoke getUserMedia once.';
-                if(location.protocol !== 'https:') {
+                if (location.protocol !== 'https:') {
                     device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
                 }
             } else {
@@ -131,7 +129,7 @@ function checkDeviceSupport(callback) {
             MediaDevices.push(device);
         });
 
-        if(typeof DetectRTC !== 'undefined') {
+        if (typeof DetectRTC !== 'undefined') {
             // to sync latest outputs
             DetectRTC.MediaDevices = MediaDevices;
             DetectRTC.hasMicrophone = hasMicrophone;

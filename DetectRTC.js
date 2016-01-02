@@ -1,4 +1,4 @@
-// Last time updated at Friday, January 1st, 2016, 5:04:28 PM 
+// Last time updated at Saturday, January 2nd, 2016, 2:59:43 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -36,6 +36,12 @@
     var isMobileDevice = !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i);
     var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
 
+    var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+    var isFirefox = typeof window.InstallTrigger !== 'undefined';
+    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    var isChrome = !!window.chrome && !isOpera;
+    var isIE = !!document.documentMode && !isEdge;
+
     // this one can also be used:
     // https://www.websocket.org/js/stuff.js (DetectBrowser.js)
 
@@ -48,26 +54,31 @@
         var nameOffset, verOffset, ix;
 
         // In Opera, the true version is after 'Opera' or after 'Version'
-        if ((verOffset = nAgt.indexOf('Opera')) !== -1) {
+        if (isOpera) {
             browserName = 'Opera';
-            fullVersion = nAgt.substring(verOffset + 6);
-
-            if ((verOffset = nAgt.indexOf('Version')) !== -1) {
-                fullVersion = nAgt.substring(verOffset + 8);
+            try {
+                fullVersion = navigator.userAgent.split('OPR/')[1].split(' ')[0];
+                majorVersion = fullVersion.split('.')[0];
+            } catch (e) {
+                fullVersion = '0.0.0.0';
+                majorVersion = 0;
             }
         }
         // In MSIE, the true version is after 'MSIE' in userAgent
-        else if ((verOffset = nAgt.indexOf('MSIE')) !== -1) {
+        else if (isIE) {
+            verOffset = nAgt.indexOf('MSIE');
             browserName = 'IE';
             fullVersion = nAgt.substring(verOffset + 5);
         }
         // In Chrome, the true version is after 'Chrome' 
-        else if ((verOffset = nAgt.indexOf('Chrome')) !== -1) {
+        else if (isChrome) {
+            verOffset = nAgt.indexOf('Chrome');
             browserName = 'Chrome';
             fullVersion = nAgt.substring(verOffset + 7);
         }
         // In Safari, the true version is after 'Safari' or after 'Version' 
-        else if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
+        else if (isSafari) {
+            verOffset = nAgt.indexOf('Safari');
             browserName = 'Safari';
             fullVersion = nAgt.substring(verOffset + 7);
 
@@ -76,7 +87,8 @@
             }
         }
         // In Firefox, the true version is after 'Firefox' 
-        else if ((verOffset = nAgt.indexOf('Firefox')) !== -1) {
+        else if (isFirefox) {
+            verOffset = nAgt.indexOf('Firefox');
             browserName = 'Firefox';
             fullVersion = nAgt.substring(verOffset + 8);
         }
@@ -116,8 +128,110 @@
         return {
             fullVersion: fullVersion,
             version: majorVersion,
-            name: browserName
+            name: browserName,
+            isPrivateBrowsing: false
         };
+    }
+
+    // via: https://gist.github.com/cou929/7973956
+
+    function retry(isDone, next) {
+        var currentTrial = 0,
+            maxRetry = 50,
+            interval = 10,
+            isTimeout = false;
+        var id = window.setInterval(
+            function() {
+                if (isDone()) {
+                    window.clearInterval(id);
+                    next(isTimeout);
+                }
+                if (currentTrial++ > maxRetry) {
+                    window.clearInterval(id);
+                    isTimeout = true;
+                    next(isTimeout);
+                }
+            },
+            10
+        );
+    }
+
+    function isIE10OrLater(userAgent) {
+        var ua = userAgent.toLowerCase();
+        if (ua.indexOf('msie') === 0 && ua.indexOf('trident') === 0) {
+            return false;
+        }
+        var match = /(?:msie|rv:)\s?([\d\.]+)/.exec(ua);
+        if (match && parseInt(match[1], 10) >= 10) {
+            return true;
+        }
+        return false;
+    }
+
+    function detectPrivateMode(callback) {
+        var isPrivate;
+
+        if (window.webkitRequestFileSystem) {
+            window.webkitRequestFileSystem(
+                window.TEMPORARY, 1,
+                function() {
+                    isPrivate = false;
+                },
+                function(e) {
+                    console.log(e);
+                    isPrivate = true;
+                }
+            );
+        } else if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
+            var db;
+            try {
+                db = window.indexedDB.open('test');
+            } catch (e) {
+                isPrivate = true;
+            }
+
+            if (typeof isPrivate === 'undefined') {
+                retry(
+                    function isDone() {
+                        return db.readyState === 'done' ? true : false;
+                    },
+                    function next(isTimeout) {
+                        if (!isTimeout) {
+                            isPrivate = db.result ? false : true;
+                        }
+                    }
+                );
+            }
+        } else if (isIE10OrLater(window.navigator.userAgent)) {
+            isPrivate = false;
+            try {
+                if (!window.indexedDB) {
+                    isPrivate = true;
+                }
+            } catch (e) {
+                isPrivate = true;
+            }
+        } else if (window.localStorage && /Safari/.test(window.navigator.userAgent)) {
+            try {
+                window.localStorage.setItem('test', 1);
+            } catch (e) {
+                isPrivate = true;
+            }
+
+            if (typeof isPrivate === 'undefined') {
+                isPrivate = false;
+                window.localStorage.removeItem('test');
+            }
+        }
+
+        retry(
+            function isDone() {
+                return typeof isPrivate !== 'undefined' ? true : false;
+            },
+            function next(isTimeout) {
+                callback(isPrivate);
+            }
+        );
     }
 
     var isMobile = {
@@ -165,28 +279,139 @@
         }
     };
 
+    // via: http://jsfiddle.net/ChristianL/AVyND/
+    function detectDesktopOS() {
+        var unknown = '-';
+
+        var nVer = navigator.appVersion;
+        var nAgt = navigator.userAgent;
+
+        var os = unknown;
+        var clientStrings = [{
+            s: 'Windows 10',
+            r: /(Windows 10.0|Windows NT 10.0)/
+        }, {
+            s: 'Windows 8.1',
+            r: /(Windows 8.1|Windows NT 6.3)/
+        }, {
+            s: 'Windows 8',
+            r: /(Windows 8|Windows NT 6.2)/
+        }, {
+            s: 'Windows 7',
+            r: /(Windows 7|Windows NT 6.1)/
+        }, {
+            s: 'Windows Vista',
+            r: /Windows NT 6.0/
+        }, {
+            s: 'Windows Server 2003',
+            r: /Windows NT 5.2/
+        }, {
+            s: 'Windows XP',
+            r: /(Windows NT 5.1|Windows XP)/
+        }, {
+            s: 'Windows 2000',
+            r: /(Windows NT 5.0|Windows 2000)/
+        }, {
+            s: 'Windows ME',
+            r: /(Win 9x 4.90|Windows ME)/
+        }, {
+            s: 'Windows 98',
+            r: /(Windows 98|Win98)/
+        }, {
+            s: 'Windows 95',
+            r: /(Windows 95|Win95|Windows_95)/
+        }, {
+            s: 'Windows NT 4.0',
+            r: /(Windows NT 4.0|WinNT4.0|WinNT|Windows NT)/
+        }, {
+            s: 'Windows CE',
+            r: /Windows CE/
+        }, {
+            s: 'Windows 3.11',
+            r: /Win16/
+        }, {
+            s: 'Android',
+            r: /Android/
+        }, {
+            s: 'Open BSD',
+            r: /OpenBSD/
+        }, {
+            s: 'Sun OS',
+            r: /SunOS/
+        }, {
+            s: 'Linux',
+            r: /(Linux|X11)/
+        }, {
+            s: 'iOS',
+            r: /(iPhone|iPad|iPod)/
+        }, {
+            s: 'Mac OS X',
+            r: /Mac OS X/
+        }, {
+            s: 'Mac OS',
+            r: /(MacPPC|MacIntel|Mac_PowerPC|Macintosh)/
+        }, {
+            s: 'QNX',
+            r: /QNX/
+        }, {
+            s: 'UNIX',
+            r: /UNIX/
+        }, {
+            s: 'BeOS',
+            r: /BeOS/
+        }, {
+            s: 'OS/2',
+            r: /OS\/2/
+        }, {
+            s: 'Search Bot',
+            r: /(nuhk|Googlebot|Yammybot|Openbot|Slurp|MSNBot|Ask Jeeves\/Teoma|ia_archiver)/
+        }];
+        for (var id in clientStrings) {
+            var cs = clientStrings[id];
+            if (cs.r.test(nAgt)) {
+                os = cs.s;
+                break;
+            }
+        }
+
+        var osVersion = unknown;
+
+        if (/Windows/.test(os)) {
+            osVersion = /Windows (.*)/.exec(os)[1];
+            os = 'Windows';
+        }
+
+        switch (os) {
+            case 'Mac OS X':
+                osVersion = /Mac OS X (10[\.\_\d]+)/.exec(nAgt)[1];
+                break;
+
+            case 'Android':
+                osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
+                break;
+
+            case 'iOS':
+                osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
+                osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                break;
+        }
+
+        return {
+            osName: os,
+            osVersion: osVersion
+        };
+    }
+
     var osName = 'Unknown OS';
+    var osVersion = 'Unknown OS Version';
 
     if (isMobile.any()) {
         osName = isMobile.getOsName();
     } else {
-        if (navigator.appVersion.indexOf('Win') !== -1) {
-            osName = 'Windows';
-        }
-
-        if (navigator.appVersion.indexOf('Mac') !== -1) {
-            osName = 'MacOS';
-        }
-
-        if (navigator.appVersion.indexOf('X11') !== -1) {
-            osName = 'UNIX';
-        }
-
-        if (navigator.appVersion.indexOf('Linux') !== -1) {
-            osName = 'Linux';
-        }
+        var osInfo = detectDesktopOS();
+        osName = osInfo.osName;
+        osVersion = osInfo.osVersion;
     }
-
 
     var isCanvasSupportsStreamCapturing = false;
     var isVideoSupportsStreamCapturing = false;
@@ -489,6 +714,10 @@
     // DetectRTC.browser.name || DetectRTC.browser.version || DetectRTC.browser.fullVersion
     DetectRTC.browser = getBrowserInfo();
 
+    detectPrivateMode(function(isPrivateBrowsing) {
+        DetectRTC.browser.isPrivateBrowsing = !!isPrivateBrowsing;
+    });
+
     // DetectRTC.isChrome || DetectRTC.isFirefox || DetectRTC.isEdge
     DetectRTC.browser['is' + DetectRTC.browser.name] = true;
 
@@ -605,7 +834,16 @@
     DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
 
     // -----------
-    DetectRTC.osName = osName; // "osName" is defined in "detectOSName.js"
+    DetectRTC.osName = osName;
+    DetectRTC.osVersion = osVersion;
+
+    var displayResolution = '';
+    if (screen.width) {
+        var width = (screen.width) ? screen.width : '';
+        var height = (screen.height) ? screen.height : '';
+        displayResolution += '' + width + ' x ' + height;
+    }
+    DetectRTC.displayResolution = displayResolution;
 
     // ----------
     DetectRTC.isCanvasSupportsStreamCapturing = isCanvasSupportsStreamCapturing;

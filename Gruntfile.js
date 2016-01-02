@@ -22,7 +22,9 @@ module.exports = function(grunt) {
                     'dev/head.js',
                     'dev/common.js',
                     'dev/getBrowserInfo.js',
+                    'dev/detectPrivateBrowsing.js',
                     'dev/isMobile.js',
+                    'dev/detectDesktopOS.js',
                     'dev/detectOSName.js',
                     'dev/detectCaptureStream.js',
                     'dev/DetectLocalIPAddress.js',
@@ -54,6 +56,7 @@ module.exports = function(grunt) {
         },
         jsbeautifier: {
             files: [
+                'dev/*.js',
                 'DetectRTC.js',
                 'Gruntfile.js'
             ],
