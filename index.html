@@ -143,6 +143,7 @@
                     var tr = document.createElement('tr');
                     tr.innerHTML = '<td style="padding:5px;max-width:' + (parseInt(innerWidth / 2) -  180) + 'px; overflow:hidden;">' + firstValue + '</td><td style="padding:5px;">' + secondValue + '</td>';
                     browserFeaturesTable.appendChild(tr);
+                    return tr;
                 }
 
                 function printVal(value) {
@@ -158,8 +159,8 @@
                 DetectRTC.load(function() {
                     browserFeaturesTable.innerHTML = '';
 
-                    appendTR('Operating System', printVal(DetectRTC.osName) + '<br>' + printVal(DetectRTC.osVersion));
-                    appendTR('Browser', printVal(DetectRTC.browser.name) + '<br>' + printVal(DetectRTC.browser.fullVersion) + '<br>Private browsing? ' + printVal(DetectRTC.browser.isPrivateBrowsing));
+                    appendTR('Operating System', printVal(DetectRTC.osName) + ' version: ' + printVal(DetectRTC.osVersion));
+                    appendTR('Browser', printVal(DetectRTC.browser.name) + ' version: ' + printVal(DetectRTC.browser.fullVersion) + '<br>Private browsing? ' + printVal(DetectRTC.browser.isPrivateBrowsing));
 
                     appendTR('Display resolutions', printVal(DetectRTC.displayResolution));
 
@@ -219,7 +220,11 @@
                     appendTR('Can your browser record remote audio or process remote audio stream in WebAudio API?', printVal(DetectRTC.isRemoteStreamProcessingSupported));
 
                     appendTR('Browser Supports WebSockets API?', printVal(DetectRTC.isWebSocketsSupported));
-                    appendTR('Your system blocked WebSockets protocol or WebSockets server is not accessible?', printVal(DetectRTC.isWebSocketsBlocked));
+                    
+                    var tr = appendTR('Your system blocked WebSockets protocol or WebSockets server is not accessible?', printVal(DetectRTC.isWebSocketsBlocked));
+                    DetectRTC.checkWebSocketsSupport(function() {
+                        tr.querySelectorAll('td')[1].innerHTML = printVal(DetectRTC.isWebSocketsBlocked);
+                    });
 
                     appendTR('Browser Supports WebAudio API?', printVal(DetectRTC.isAudioContextSupported));
                     appendTR('Browser Supports SCTP Data Channels?', printVal(DetectRTC.isSctpDataChannelsSupported));
@@ -251,7 +256,7 @@
 
                     appendTR(audioDevices.length + ' audio and ' + videoDevices.length + ' video devices', rightSide);
 
-                    appendTR('Is Browser Supports Video Capturing from Canvas?', printVal(DetectRTC.isVideoSupportsStreamCapturing));
+                    appendTR('Is Browser Supports Stream Capturing from Canvas?', printVal(DetectRTC.isVideoSupportsStreamCapturing));
                     appendTR('Is Browser Supports Stream Capturing from Video?', printVal(DetectRTC.isVideoSupportsStreamCapturing));
 
                     /*
@@ -274,7 +279,7 @@
                         pre = document.createElement('pre');
                         pre.className = 'sh_javascript inline-pre';
                         pre.innerHTML += '\
-var secondarySpeakers = DetectRTC.audioInputDevices[1];<br>\
+var secondarySpeakers = DetectRTC.audioOutputDevices[1];<br>\
 if(secondarySpeakers) {<br>\
    videoElement.setSinkId(secondarySpeakers.deviceId);<br>\
 }';
@@ -440,7 +445,10 @@ DetectRTC.load(function() {
     DetectRTC.isWebRTCSupported
     DetectRTC.isDesktopCapturingSupported
     DetectRTC.isMobileDevice
+    
     DetectRTC.isWebSocketsSupported
+    DetectRTC.isWebSocketsBlocked
+    DetectRTC.checkWebSocketsSupport(callback)
 
     DetectRTC.isWebsiteHasWebcamPermissions        // getUserMedia allowed for HTTPs domain in Chrome?
     DetectRTC.isWebsiteHasMicrophonePermissions    // getUserMedia allowed for HTTPs domain in Chrome?

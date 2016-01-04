@@ -30,7 +30,7 @@ DetectRTC.audioInputDevices    // (implemented)
 DetectRTC.audioOutputDevices   // (implemented)
 DetectRTC.videoInputDevices    // (implemented)
 
-# Below API are NOT implemented yet
+// Below API are NOT implemented yet
 DetectRTC.browser.googSupportedFlags.googDAEEchoCancellation
 DetecRTC.browser.googSupportedFlags.echoCancellation
 DetectRTC.isMediaHintsSupportsNewSyntax
@@ -63,6 +63,13 @@ http://localhost:9001
 <script src="https://cdn.rawgit.com/muaz-khan/DetectRTC/master/DetectRTC.js"></script>
 ```
 
+You can even link specific versions:
+
+```html
+<!-- replace "1.2.5" with latest release/build -->
+<script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.2.5/DetectRTC.js"></script>
+```
+
 <img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
 
 # How to use it?
@@ -79,7 +86,10 @@ DetectRTC.load(function() {
     DetectRTC.isWebRTCSupported
     DetectRTC.isDesktopCapturingSupported
     DetectRTC.isMobileDevice
+
     DetectRTC.isWebSocketsSupported
+    DetectRTC.isWebSocketsBlocked
+    DetectRTC.checkWebSocketsSupport(callback)
 
     DetectRTC.isWebsiteHasWebcamPermissions        // getUserMedia allowed for HTTPs domain in Chrome?
     DetectRTC.isWebsiteHasMicrophonePermissions    // getUserMedia allowed for HTTPs domain in Chrome?
@@ -154,8 +164,6 @@ function selectSecondaryCamera() {
 For further tricks & usages:
 
 * https://www.webrtc-experiment.com/webrtcpedia/#modify-streams
-
-<img src="https://i.imgur.com/YXehckT.jpg?1" />
 
 # Rules to Contribute
 

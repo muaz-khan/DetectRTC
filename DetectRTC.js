@@ -1,4 +1,4 @@
-// Last time updated at Saturday, January 2nd, 2016, 2:59:43 PM 
+// Last time updated at Monday, January 4th, 2016, 1:17:50 PM 
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -666,22 +666,33 @@
 
                 if (device.kind === 'audioinput') {
                     hasMicrophone = true;
-                    audioInputDevices.push(device);
+
+                    if (audioInputDevices.indexOf(device) === -1) {
+                        audioInputDevices.push(device);
+                    }
                 }
 
                 if (device.kind === 'audiooutput') {
                     hasSpeakers = true;
-                    audioOutputDevices.push(device);
+
+                    if (audioOutputDevices.indexOf(device) === -1) {
+                        audioOutputDevices.push(device);
+                    }
                 }
 
                 if (device.kind === 'videoinput') {
                     hasWebcam = true;
-                    videoInputDevices.push(device);
+
+                    if (videoInputDevices.indexOf(device) === -1) {
+                        videoInputDevices.push(device);
+                    }
                 }
 
                 // there is no 'videoouput' in the spec.
 
-                MediaDevices.push(device);
+                if (MediaDevices.indexOf(device) === -1) {
+                    MediaDevices.push(device);
+                }
             });
 
             if (typeof DetectRTC !== 'undefined') {
@@ -797,31 +808,6 @@
     DetectRTC.isMobileDevice = isMobileDevice; // "isMobileDevice" boolean is defined in "getBrowserInfo.js"
 
     // ------
-
-    DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
-    DetectRTC.isWebSocketsBlocked = 'Checking';
-
-    if (DetectRTC.isWebSocketsSupported) {
-        var websocket = new WebSocket('wss://echo.websocket.org:443/');
-        websocket.onopen = function() {
-            DetectRTC.isWebSocketsBlocked = false;
-
-            if (DetectRTC.loadCallback) {
-                DetectRTC.loadCallback();
-            }
-            websocket.close();
-            websocket = null;
-        };
-        websocket.onerror = function() {
-            DetectRTC.isWebSocketsBlocked = true;
-
-            if (DetectRTC.loadCallback) {
-                DetectRTC.loadCallback();
-            }
-        };
-    }
-
-    // ------
     var isGetUserMediaSupported = false;
     if (navigator.getUserMedia) {
         isGetUserMediaSupported = true;
@@ -852,10 +838,32 @@
     // ------
     DetectRTC.DetectLocalIPAddress = DetectLocalIPAddress;
 
+    DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
+    DetectRTC.isWebSocketsBlocked = !DetectRTC.isWebSocketsSupported;
+
+    DetectRTC.checkWebSocketsSupport = function(callback) {
+        callback = callback || function() {};
+        try {
+            var websocket = new WebSocket('wss://echo.websocket.org:443/');
+            websocket.onopen = function() {
+                DetectRTC.isWebSocketsBlocked = false;
+                callback();
+                websocket.close();
+                websocket = null;
+            };
+            websocket.onerror = function() {
+                DetectRTC.isWebSocketsBlocked = true;
+                callback();
+            };
+        } catch (e) {
+            DetectRTC.isWebSocketsBlocked = true;
+            callback();
+        }
+    };
+
     // -------
     DetectRTC.load = function(callback) {
-        this.loadCallback = callback;
-
+        callback = callback || function() {};
         checkDeviceSupport(callback);
     };
 

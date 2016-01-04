@@ -87,31 +87,6 @@ DetectRTC.isSctpDataChannelsSupported = isSCTPSupportd;
 DetectRTC.isMobileDevice = isMobileDevice; // "isMobileDevice" boolean is defined in "getBrowserInfo.js"
 
 // ------
-
-DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
-DetectRTC.isWebSocketsBlocked = 'Checking';
-
-if (DetectRTC.isWebSocketsSupported) {
-    var websocket = new WebSocket('wss://echo.websocket.org:443/');
-    websocket.onopen = function() {
-        DetectRTC.isWebSocketsBlocked = false;
-
-        if (DetectRTC.loadCallback) {
-            DetectRTC.loadCallback();
-        }
-        websocket.close();
-        websocket = null;
-    };
-    websocket.onerror = function() {
-        DetectRTC.isWebSocketsBlocked = true;
-
-        if (DetectRTC.loadCallback) {
-            DetectRTC.loadCallback();
-        }
-    };
-}
-
-// ------
 var isGetUserMediaSupported = false;
 if (navigator.getUserMedia) {
     isGetUserMediaSupported = true;
@@ -142,10 +117,32 @@ DetectRTC.isVideoSupportsStreamCapturing = isVideoSupportsStreamCapturing;
 // ------
 DetectRTC.DetectLocalIPAddress = DetectLocalIPAddress;
 
+DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
+DetectRTC.isWebSocketsBlocked = !DetectRTC.isWebSocketsSupported;
+
+DetectRTC.checkWebSocketsSupport = function(callback) {
+    callback = callback || function() {};
+    try {
+        var websocket = new WebSocket('wss://echo.websocket.org:443/');
+        websocket.onopen = function() {
+            DetectRTC.isWebSocketsBlocked = false;
+            callback();
+            websocket.close();
+            websocket = null;
+        };
+        websocket.onerror = function() {
+            DetectRTC.isWebSocketsBlocked = true;
+            callback();
+        };
+    } catch (e) {
+        DetectRTC.isWebSocketsBlocked = true;
+        callback();
+    }
+};
+
 // -------
 DetectRTC.load = function(callback) {
-    this.loadCallback = callback;
-
+    callback = callback || function() {};
     checkDeviceSupport(callback);
 };
 

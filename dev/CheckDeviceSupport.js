@@ -111,22 +111,33 @@ function checkDeviceSupport(callback) {
 
             if (device.kind === 'audioinput') {
                 hasMicrophone = true;
-                audioInputDevices.push(device);
+
+                if (audioInputDevices.indexOf(device) === -1) {
+                    audioInputDevices.push(device);
+                }
             }
 
             if (device.kind === 'audiooutput') {
                 hasSpeakers = true;
-                audioOutputDevices.push(device);
+
+                if (audioOutputDevices.indexOf(device) === -1) {
+                    audioOutputDevices.push(device);
+                }
             }
 
             if (device.kind === 'videoinput') {
                 hasWebcam = true;
-                videoInputDevices.push(device);
+
+                if (videoInputDevices.indexOf(device) === -1) {
+                    videoInputDevices.push(device);
+                }
             }
 
             // there is no 'videoouput' in the spec.
 
-            MediaDevices.push(device);
+            if (MediaDevices.indexOf(device) === -1) {
+                MediaDevices.push(device);
+            }
         });
 
         if (typeof DetectRTC !== 'undefined') {
