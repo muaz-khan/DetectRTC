@@ -96,22 +96,28 @@ function detectDesktopOS() {
     var osVersion = unknown;
 
     if (/Windows/.test(os)) {
-        osVersion = /Windows (.*)/.exec(os)[1];
+        if (/Windows (.*)/.test(os)) {
+            osVersion = /Windows (.*)/.exec(os)[1];
+        }
         os = 'Windows';
     }
 
     switch (os) {
         case 'Mac OS X':
-            osVersion = /Mac OS X (10[\.\_\d]+)/.exec(nAgt)[1];
+            if (/Mac OS X (10[\.\_\d]+)/.test(nAgt)) {
+                osVersion = /Mac OS X (10[\.\_\d]+)/.exec(nAgt)[1];
+            }
             break;
-
         case 'Android':
-            osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
+            if (/Android ([\.\_\d]+)/.test(nAgt)) {
+                osVersion = /Android ([\.\_\d]+)/.exec(nAgt)[1];
+            }
             break;
-
         case 'iOS':
-            osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
-            osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+            if (/OS (\d+)_(\d+)_?(\d+)?/.test(nAgt)) {
+                osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
+                osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+            }
             break;
     }
 
