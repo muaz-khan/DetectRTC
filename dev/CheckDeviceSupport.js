@@ -97,7 +97,9 @@ function checkDeviceSupport(callback) {
             if (!device.label) {
                 device.label = 'Please invoke getUserMedia once.';
                 if (location.protocol !== 'https:') {
-                    device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                    if (document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
+                        device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
+                    }
                 }
             } else {
                 if (device.kind === 'videoinput' && !isWebsiteHasWebcamPermissions) {

@@ -77,6 +77,7 @@
         -->
         <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script>
         <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
+        <script src="https://cdn.webrtc-experiment.com/gumadapter.js"></script>
 
         <!-- scripts to highlight syntax -->
         <script src="https://cdn.webrtc-experiment.com/syntax/sh_main.min.js" type="text/javascript"> </script>
@@ -156,7 +157,7 @@
 
                 var output = '';
 
-                DetectRTC.load(function() {
+                function onDetectRTCLoaded() {
                     browserFeaturesTable.innerHTML = '';
 
                     appendTR('Operating System', printVal(DetectRTC.osName) + ' version: ' + printVal(DetectRTC.osVersion));
@@ -330,6 +331,19 @@ rtpSenders.replaceTrack(newTrack);';
                         pre.focus();
                         sh_highlightDocument();
                     };
+                }
+
+                function reloadDetectRTC() {
+                    DetectRTC.load(onDetectRTCLoaded);
+                }
+
+                DetectRTC.load(function() {
+                    if(DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].label === 'Please invoke getUserMedia once.') {
+                        navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(reloadDetectRTC).catch(reloadDetectRTC);
+                        return;
+                    }
+
+                    onDetectRTCLoaded();
                 });
 
                 document.getElementById('save').onclick = function() {
@@ -408,8 +422,6 @@ rtpSenders.replaceTrack(newTrack);';
                     });
                 }
             </script>
-
-            <section class="experiment"><img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" /></section>
 
             <section class="experiment own-widgets">
                 <h2 class="header" id="updates" style="color: red; padding-bottom: .1em;"><a href="https://github.com/muaz-khan/DetectRTC/issues" target="_blank">DetectRTC Issues</a>
