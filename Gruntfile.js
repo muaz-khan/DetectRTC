@@ -7,6 +7,8 @@ module.exports = function(grunt) {
         scope: 'devDependencies'
     });
 
+    var banner = '// Last time updated: <%= grunt.template.today("UTC:yyyy-mm-dd h:MM:ss TT Z") %>\n\n';
+
     // configure project
     grunt.initConfig({
         // make node configurations available
@@ -15,7 +17,7 @@ module.exports = function(grunt) {
             options: {
                 stripBanners: true,
                 separator: '\n',
-                banner: '// Last time updated at <%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %> \n\n'
+                banner: banner
             },
             dist: {
                 src: [
@@ -30,6 +32,7 @@ module.exports = function(grunt) {
                     'dev/DetectLocalIPAddress.js',
                     'dev/checkDeviceSupport.js',
                     'dev/DetectRTC.js',
+                    'dev/Objects.js',
                     'dev/tail.js'
                 ],
                 dest: 'DetectRTC.js',
@@ -46,7 +49,7 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 mangle: false,
-                banner: '// Last time updated at <%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %> \n\n'
+                banner: banner
             },
             my_target: {
                 files: {

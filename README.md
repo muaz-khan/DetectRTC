@@ -66,8 +66,8 @@ http://localhost:9001
 You can even link specific versions:
 
 ```html
-<!-- replace "1.2.5" with latest release/build -->
-<script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.2.5/DetectRTC.js"></script>
+<!-- replace "1.2.8" with latest release/build -->
+<script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.2.8/DetectRTC.js"></script>
 ```
 
 <img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />

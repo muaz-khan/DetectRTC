@@ -1,4 +1,4 @@
-// Last time updated at Friday, January 8th, 2016, 10:57:13 PM 
+// Last time updated: 2016-03-29 8:59:02 AM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -33,7 +33,8 @@
         };
     }
 
-    var isMobileDevice = !!navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i);
+    var isMobileDevice = !!(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(navigator.userAgent || ''));
+
     var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
 
     var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
@@ -901,7 +902,7 @@
         if ('getSenders' in mozRTCPeerConnection.prototype) {
             isRTPSenderReplaceTracksSupported = true;
         }
-    } else if (DetectRTC.browser.isChrome) {
+    } else if (DetectRTC.browser.isChrome && typeof webkitRTCPeerConnection !== 'undefined') {
         /*global webkitRTCPeerConnection:true */
         if ('getSenders' in webkitRTCPeerConnection.prototype) {
             isRTPSenderReplaceTracksSupported = true;
@@ -933,6 +934,32 @@
         isMultiMonitorScreenCapturingSupported = true;
     }
     DetectRTC.isMultiMonitorScreenCapturingSupported = isMultiMonitorScreenCapturingSupported;
+
+    DetectRTC.isPromisesSupported = !!('Promise' in window);
+
+    if (typeof DetectRTC === 'undefined') {
+        window.DetectRTC = {};
+    }
+
+    var MediaStream = window.MediaStream;
+
+    if (typeof MediaStream === 'undefined' && typeof webkitMediaStream !== 'undefined') {
+        MediaStream = webkitMediaStream;
+    }
+
+    if (typeof MediaStream !== 'undefined') {
+        DetectRTC.MediaStream = Object.keys(MediaStream.prototype);
+    } else DetectRTC.MediaStream = false;
+
+    if (typeof MediaStreamTrack !== 'undefined') {
+        DetectRTC.MediaStreamTrack = Object.keys(MediaStreamTrack.prototype);
+    } else DetectRTC.MediaStreamTrack = false;
+
+    var RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+
+    if (typeof RTCPeerConnection !== 'undefined') {
+        DetectRTC.RTCPeerConnection = Object.keys(RTCPeerConnection.prototype);
+    } else DetectRTC.RTCPeerConnection = false;
 
     window.DetectRTC = DetectRTC;
 

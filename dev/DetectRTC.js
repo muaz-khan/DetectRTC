@@ -172,7 +172,7 @@ if (DetectRTC.browser.isFirefox /*&& DetectRTC.browser.version > 39*/ ) {
     if ('getSenders' in mozRTCPeerConnection.prototype) {
         isRTPSenderReplaceTracksSupported = true;
     }
-} else if (DetectRTC.browser.isChrome) {
+} else if (DetectRTC.browser.isChrome && typeof webkitRTCPeerConnection !== 'undefined') {
     /*global webkitRTCPeerConnection:true */
     if ('getSenders' in webkitRTCPeerConnection.prototype) {
         isRTPSenderReplaceTracksSupported = true;
@@ -204,3 +204,5 @@ if (DetectRTC.browser.isFirefox && DetectRTC.browser.version >= 43) {
     isMultiMonitorScreenCapturingSupported = true;
 }
 DetectRTC.isMultiMonitorScreenCapturingSupported = isMultiMonitorScreenCapturingSupported;
+
+DetectRTC.isPromisesSupported = !!('Promise' in window);
