@@ -1,4 +1,4 @@
-// Last time updated: 2016-03-29 8:59:02 AM UTC
+// Last time updated: 2016-04-26 1:45:40 PM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -570,11 +570,13 @@
         // Firefox 38+ seems having support of enumerateDevices
         // Thanks @xdumaine/enumerateDevices
         navigator.enumerateDevices = function(callback) {
-            navigator.mediaDevices.enumerateDevices().then(callback);
+            navigator.mediaDevices.enumerateDevices().then(callback).catch(function() {
+                callback([]);
+            });
         };
     }
 
-    // ---------- Media Devices detection
+    // Media Devices detection
     var canEnumerate = false;
 
     /*global MediaStreamTrack:true */
@@ -592,13 +594,13 @@
     var isWebsiteHasWebcamPermissions = false;
 
     // http://dev.w3.org/2011/webrtc/editor/getusermedia.html#mediadevices
-    // todo: switch to enumerateDevices when landed in canary.
     function checkDeviceSupport(callback) {
         if (!canEnumerate) {
+            if (callback) {
+                callback();
+            }
             return;
         }
-
-        // This method is useful only for Chrome!
 
         if (!navigator.enumerateDevices && window.MediaStreamTrack && window.MediaStreamTrack.getSources) {
             navigator.enumerateDevices = window.MediaStreamTrack.getSources.bind(window.MediaStreamTrack);
