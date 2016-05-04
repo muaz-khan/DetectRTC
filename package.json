@@ -1,7 +1,7 @@
 {
     "name": "detectrtc",
     "preferGlobal": false,
-    "version": "1.2.9",
+    "version": "1.3.0",
     "author": {
         "name": "Muaz Khan",
         "email": "muazkh@gmail.com",
@@ -12,6 +12,10 @@
         "type": "git",
         "url": "https://github.com/muaz-khan/DetectRTC.git"
     },
+    "scripts": {
+        "start": "node server.js"
+    },
+    "main": "DetectRTC.js",
     "keywords": [
         "webrtc",
         "detectrtc",
@@ -32,6 +36,7 @@
         "email": "muazkh@gmail.com"
     },
     "homepage": "https://www.webrtc-experiment.com/DetectRTC/",
+    "tonicExampleFilename": "npm-test.js",
     "_id": "detectrtc@",
     "_from": "detectrtc@",
     "devDependencies": {
