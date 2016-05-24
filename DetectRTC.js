@@ -1,4 +1,4 @@
-// Last time updated: 2016-05-23 4:52:53 PM UTC
+// Last time updated: 2016-05-24 2:44:27 PM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
