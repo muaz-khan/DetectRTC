@@ -56,7 +56,7 @@ var webAudio = {
     if (item in window) {
         webAudio.isSupported = true;
 
-        if ('createMediaStreamSource' in window[item].prototype) {
+        if (window[item] && 'createMediaStreamSource' in window[item].prototype) {
             webAudio.isCreateMediaStreamSourceSupported = true;
         }
     }
