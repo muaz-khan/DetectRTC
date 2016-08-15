@@ -1,4 +1,4 @@
-// Last time updated: 2016-06-17 7:44:40 AM UTC
+// Last time updated: 2016-08-15 9:54:58 PM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -707,7 +707,7 @@
 
                 if (!device.label) {
                     device.label = 'Please invoke getUserMedia once.';
-                    if (location.protocol !== 'https:') {
+                    if (!/^(https:|chrome-extension:)$/g.test(location.protocol)) {
                         if (document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
                             device.label = 'HTTPs is required to get label of this ' + device.kind + ' device.';
                         }
