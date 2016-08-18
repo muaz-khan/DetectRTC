@@ -344,6 +344,7 @@ rtpSenders.replaceTrack(newTrack);';
                     this.parentNode.removeChild(this);
 
                     html2canvas(browserFeaturesTable.parentNode, {
+                        background :'#FFFFFF',
                         grabMouse: false,
                         onrendered: function(canvas) {
                             var image = canvas.toDataURL('image/jpeg');
