@@ -43,7 +43,6 @@ function detectPrivateMode(callback) {
                 isPrivate = false;
             },
             function(e) {
-                console.log(e);
                 isPrivate = true;
             }
         );
