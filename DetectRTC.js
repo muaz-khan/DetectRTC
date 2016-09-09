@@ -233,6 +233,9 @@
             var db;
             try {
                 db = window.indexedDB.open('test');
+                db.onerror = function() {
+                   return true;
+                }
             } catch (e) {
                 isPrivate = true;
             }
