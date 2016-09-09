@@ -1,4 +1,4 @@
-// Last time updated: 2016-09-04 3:03:44 AM UTC
+// Last time updated: 2016-09-09 2:36:51 PM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -234,8 +234,8 @@
             try {
                 db = window.indexedDB.open('test');
                 db.onerror = function() {
-                   return true;
-                }
+                    return true;
+                };
             } catch (e) {
                 isPrivate = true;
             }
