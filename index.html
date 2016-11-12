@@ -149,6 +149,10 @@
                     return tr;
                 }
 
+                window.onerror = console.error = function() {
+                    appendTR('Error', JSON.stringify(arguments), 'error');
+                };
+
                 function printVal(value) {
                     return value == true ? 'Yep' : value == false ? 'Nope' : value;
                 }
@@ -329,10 +333,27 @@ rtpSenders.replaceTrack(newTrack);';
                 DetectRTC.load(function() {
                     reloadDetectRTC();
 
-                    if(DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].label === 'Please invoke getUserMedia once.') {
-                        navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(reloadDetectRTC).catch(reloadDetectRTC);
-                        return;
+                    try {
+                        if(DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].label === 'Please invoke getUserMedia once.') {
+                            navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(function(stream) {
+                                reloadDetectRTC();
+                                
+                                try {
+                                    // release camera
+                                    stream.getVideoTracks().forEach(function(track) {
+                                        track.stop();
+                                    });
+
+                                    stream.getAudioTracks().forEach(function(track) {
+                                        track.stop();
+                                    });
+                                }
+                                catch(e) {}
+                            }).catch(reloadDetectRTC);
+                            return;
+                        }
                     }
+                    catch(e) {}
 
                     onDetectRTCLoaded();
                 });
