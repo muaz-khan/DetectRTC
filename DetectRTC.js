@@ -1,4 +1,4 @@
-// Last time updated: 2016-11-12 6:02:08 AM UTC
+// Last time updated: 2017-01-26 2:03:57 PM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -461,12 +461,23 @@
     var osName = 'Unknown OS';
     var osVersion = 'Unknown OS Version';
 
-    if (isMobile.any()) {
-        osName = isMobile.getOsName();
-    } else {
-        var osInfo = detectDesktopOS();
+    function getAndroidVersion(ua) {
+        ua = (ua || navigator.userAgent).toLowerCase();
+        var match = ua.match(/android\s([0-9\.]*)/);
+        return match ? match[1] : false;
+    }
+
+    var osInfo = detectDesktopOS();
+
+    if (osInfo && osInfo.osName && osInfo.osName != '-') {
         osName = osInfo.osName;
         osVersion = osInfo.osVersion;
+    } else if (isMobile.any()) {
+        osName = isMobile.getOsName();
+
+        if (osName == 'Android') {
+            osVersion = getAndroidVersion();
+        }
     }
 
     var isCanvasSupportsStreamCapturing = false;
