@@ -1,4 +1,4 @@
-// Last time updated: 2017-01-26 2:03:57 PM UTC
+// Last time updated: 2017-02-09 11:16:16 AM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -219,59 +219,65 @@
     function detectPrivateMode(callback) {
         var isPrivate;
 
-        if (window.webkitRequestFileSystem) {
-            window.webkitRequestFileSystem(
-                window.TEMPORARY, 1,
-                function() {
-                    isPrivate = false;
-                },
-                function(e) {
-                    isPrivate = true;
-                }
-            );
-        } else if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
-            var db;
-            try {
-                db = window.indexedDB.open('test');
-                db.onerror = function() {
-                    return true;
-                };
-            } catch (e) {
-                isPrivate = true;
-            }
+        try {
 
-            if (typeof isPrivate === 'undefined') {
-                retry(
-                    function isDone() {
-                        return db.readyState === 'done' ? true : false;
+            if (window.webkitRequestFileSystem) {
+                window.webkitRequestFileSystem(
+                    window.TEMPORARY, 1,
+                    function() {
+                        isPrivate = false;
                     },
-                    function next(isTimeout) {
-                        if (!isTimeout) {
-                            isPrivate = db.result ? false : true;
-                        }
+                    function(e) {
+                        isPrivate = true;
                     }
                 );
-            }
-        } else if (isIE10OrLater(window.navigator.userAgent)) {
-            isPrivate = false;
-            try {
-                if (!window.indexedDB) {
+            } else if (window.indexedDB && /Firefox/.test(window.navigator.userAgent)) {
+                var db;
+                try {
+                    db = window.indexedDB.open('test');
+                    db.onerror = function() {
+                        return true;
+                    };
+                } catch (e) {
                     isPrivate = true;
                 }
-            } catch (e) {
-                isPrivate = true;
-            }
-        } else if (window.localStorage && /Safari/.test(window.navigator.userAgent)) {
-            try {
-                window.localStorage.setItem('test', 1);
-            } catch (e) {
-                isPrivate = true;
+
+                if (typeof isPrivate === 'undefined') {
+                    retry(
+                        function isDone() {
+                            return db.readyState === 'done' ? true : false;
+                        },
+                        function next(isTimeout) {
+                            if (!isTimeout) {
+                                isPrivate = db.result ? false : true;
+                            }
+                        }
+                    );
+                }
+            } else if (isIE10OrLater(window.navigator.userAgent)) {
+                isPrivate = false;
+                try {
+                    if (!window.indexedDB) {
+                        isPrivate = true;
+                    }
+                } catch (e) {
+                    isPrivate = true;
+                }
+            } else if (window.localStorage && /Safari/.test(window.navigator.userAgent)) {
+                try {
+                    window.localStorage.setItem('test', 1);
+                } catch (e) {
+                    isPrivate = true;
+                }
+
+                if (typeof isPrivate === 'undefined') {
+                    isPrivate = false;
+                    window.localStorage.removeItem('test');
+                }
             }
 
-            if (typeof isPrivate === 'undefined') {
-                isPrivate = false;
-                window.localStorage.removeItem('test');
-            }
+        } catch (e) {
+            isPrivate = false;
         }
 
         retry(
