@@ -1,4 +1,4 @@
-// Last time updated: 2017-02-09 11:16:16 AM UTC
+// Last time updated: 2017-03-04 2:09:01 PM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -688,6 +688,9 @@
         audioInputDevices = [];
         audioOutputDevices = [];
         videoInputDevices = [];
+
+        isWebsiteHasMicrophonePermissions = false;
+        isWebsiteHasWebcamPermissions = false;
 
         // to prevent duplication
         var alreadyUsedDevices = {};
