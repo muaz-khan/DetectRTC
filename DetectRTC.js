@@ -1,4 +1,4 @@
-// Last time updated: 2017-03-04 2:09:01 PM UTC
+// Last time updated: 2017-03-05 5:56:31 AM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -17,6 +17,12 @@
     'use strict';
 
     var browserFakeUserAgent = 'Fake/5.0 (FakeOS) AppleWebKit/123 (KHTML, like Gecko) Fake/12.3.4567.89 Fake/123.45';
+
+    var isNodejs = typeof process === 'object' && typeof process.versions === 'object' && process.versions.node;
+    if (isNodejs) {
+        var version = process.versions.node.toString().replace('v', '');
+        browserFakeUserAgent = 'Nodejs/' + version + ' (NodeOS) AppleWebKit/' + version + ' (KHTML, like Gecko) Nodejs/' + version + ' Nodejs/' + version
+    }
 
     (function(that) {
         if (typeof window !== 'undefined') {
@@ -486,6 +492,13 @@
         }
     }
 
+    var isNodejs = typeof process === 'object' && typeof process.versions === 'object' && process.versions.node;
+
+    if (osName === 'Unknown OS' && isNodejs) {
+        osName = 'Nodejs';
+        osVersion = process.versions.node.toString().replace('v', '');
+    }
+
     var isCanvasSupportsStreamCapturing = false;
     var isVideoSupportsStreamCapturing = false;
     ['captureStream', 'mozCaptureStream', 'webkitCaptureStream'].forEach(function(item) {
@@ -811,7 +824,11 @@
     // DetectRTC.isChrome || DetectRTC.isFirefox || DetectRTC.isEdge
     DetectRTC.browser['is' + DetectRTC.browser.name] = true;
 
-    var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && window.process.versions && window.process.versions['node-webkit']);
+    // -----------
+    DetectRTC.osName = osName;
+    DetectRTC.osVersion = osVersion;
+
+    var isNodeWebkit = typeof process === 'object' && typeof process.versions === 'object' && process.versions['node-webkit'];
 
     // --------- Detect if system supports WebRTC 1.0 or WebRTC 1.1.
     var isWebRTCSupported = false;
@@ -894,13 +911,12 @@
         isGetUserMediaSupported = true;
     }
     if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && location.protocol !== 'https:') {
-        DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
+        isGetUserMediaSupported = 'Requires HTTPs';
+    }
+    if (DetectRTC.osName === 'Nodejs') {
+        isGetUserMediaSupported = false;
     }
     DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
-
-    // -----------
-    DetectRTC.osName = osName;
-    DetectRTC.osVersion = osVersion;
 
     var displayResolution = '';
     if (screen.width) {
@@ -929,6 +945,11 @@
 
     DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
     DetectRTC.isWebSocketsBlocked = !DetectRTC.isWebSocketsSupported;
+
+    if (DetectRTC.osName === 'Nodejs') {
+        DetectRTC.isWebSocketsSupported = true;
+        DetectRTC.isWebSocketsBlocked = false;
+    }
 
     DetectRTC.checkWebSocketsSupport = function(callback) {
         callback = callback || function() {};

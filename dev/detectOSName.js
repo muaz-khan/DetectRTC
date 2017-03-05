@@ -19,3 +19,10 @@ if (osInfo && osInfo.osName && osInfo.osName != '-') {
         osVersion = getAndroidVersion();
     }
 }
+
+var isNodejs = typeof process === 'object' && typeof process.versions === 'object' && process.versions.node;
+
+if (osName === 'Unknown OS' && isNodejs) {
+    osName = 'Nodejs';
+    osVersion = process.versions.node.toString().replace('v', '');
+}

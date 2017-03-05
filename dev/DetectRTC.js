@@ -11,7 +11,11 @@ detectPrivateMode(function(isPrivateBrowsing) {
 // DetectRTC.isChrome || DetectRTC.isFirefox || DetectRTC.isEdge
 DetectRTC.browser['is' + DetectRTC.browser.name] = true;
 
-var isNodeWebkit = !!(window.process && (typeof window.process === 'object') && window.process.versions && window.process.versions['node-webkit']);
+// -----------
+DetectRTC.osName = osName;
+DetectRTC.osVersion = osVersion;
+
+var isNodeWebkit = typeof process === 'object' && typeof process.versions === 'object' && process.versions['node-webkit'];
 
 // --------- Detect if system supports WebRTC 1.0 or WebRTC 1.1.
 var isWebRTCSupported = false;
@@ -94,13 +98,12 @@ if (navigator.getUserMedia) {
     isGetUserMediaSupported = true;
 }
 if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && location.protocol !== 'https:') {
-    DetectRTC.isGetUserMediaSupported = 'Requires HTTPs';
+    isGetUserMediaSupported = 'Requires HTTPs';
+}
+if (DetectRTC.osName === 'Nodejs') {
+    isGetUserMediaSupported = false;
 }
 DetectRTC.isGetUserMediaSupported = isGetUserMediaSupported;
-
-// -----------
-DetectRTC.osName = osName;
-DetectRTC.osVersion = osVersion;
 
 var displayResolution = '';
 if (screen.width) {
@@ -129,6 +132,11 @@ DetectRTC.DetectLocalIPAddress = DetectLocalIPAddress;
 
 DetectRTC.isWebSocketsSupported = 'WebSocket' in window && 2 === window.WebSocket.CLOSING;
 DetectRTC.isWebSocketsBlocked = !DetectRTC.isWebSocketsSupported;
+
+if (DetectRTC.osName === 'Nodejs') {
+    DetectRTC.isWebSocketsSupported = true;
+    DetectRTC.isWebSocketsBlocked = false;
+}
 
 DetectRTC.checkWebSocketsSupport = function(callback) {
     callback = callback || function() {};
