@@ -78,7 +78,7 @@ function checkDeviceSupport(callback) {
                 } catch (e) {}
             }
 
-            if (alreadyUsedDevices[device.deviceId]) {
+            if (alreadyUsedDevices[device.deviceId + device.label]) {
                 return;
             }
 
@@ -143,7 +143,7 @@ function checkDeviceSupport(callback) {
             // there is no 'videoouput' in the spec.
             MediaDevices.push(device);
 
-            alreadyUsedDevices[device.deviceId] = device;
+            alreadyUsedDevices[device.deviceId + device.label] = device;
         });
 
         if (typeof DetectRTC !== 'undefined') {

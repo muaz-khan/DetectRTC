@@ -1,4 +1,4 @@
-// Last time updated: 2017-03-11 6:22:53 AM UTC
+// Last time updated: 2017-03-11 6:31:40 AM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -719,7 +719,7 @@
                     } catch (e) {}
                 }
 
-                if (alreadyUsedDevices[device.deviceId]) {
+                if (alreadyUsedDevices[device.deviceId + device.label]) {
                     return;
                 }
 
@@ -784,7 +784,7 @@
                 // there is no 'videoouput' in the spec.
                 MediaDevices.push(device);
 
-                alreadyUsedDevices[device.deviceId] = device;
+                alreadyUsedDevices[device.deviceId + device.label] = device;
             });
 
             if (typeof DetectRTC !== 'undefined') {
