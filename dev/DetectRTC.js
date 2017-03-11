@@ -41,8 +41,15 @@ if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 35) {
     isScreenCapturingSupported = true;
 }
 
-if (location.protocol !== 'https:') {
-    isScreenCapturingSupported = false;
+if (!/^(https:|chrome-extension:)$/g.test(location.protocol || '')) {
+    if (document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
+        // DetectRTC.browser.isChrome
+        isScreenCapturingSupported = false;
+    }
+
+    if (DetectRTC.browser.isFirefox) {
+        isScreenCapturingSupported = false;
+    }
 }
 DetectRTC.isScreenCapturingSupported = isScreenCapturingSupported;
 
@@ -97,9 +104,13 @@ if (navigator.getUserMedia) {
 } else if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     isGetUserMediaSupported = true;
 }
-if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && location.protocol !== 'https:') {
-    isGetUserMediaSupported = 'Requires HTTPs';
+
+if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && !/^(https:|chrome-extension:)$/g.test(location.protocol || '')) {
+    if (document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
+        isGetUserMediaSupported = 'Requires HTTPs';
+    }
 }
+
 if (DetectRTC.osName === 'Nodejs') {
     isGetUserMediaSupported = false;
 }
