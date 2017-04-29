@@ -1,4 +1,4 @@
-// Last time updated: 2017-04-22 4:30:12 PM UTC
+// Last time updated: 2017-04-29 7:05:22 AM UTC
 
 // Latest file can be found here: https://cdn.webrtc-experiment.com/DetectRTC.js
 
@@ -468,6 +468,7 @@
             osVersion: osVersion
         };
     }
+
     var osName = 'Unknown OS';
     var osVersion = 'Unknown OS Version';
 
