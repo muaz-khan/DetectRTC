@@ -230,7 +230,7 @@
 
                     var tr = appendTR('Your system blocked WebSockets protocol or WebSockets server is not accessible?', printVal(DetectRTC.isWebSocketsBlocked), 'isWebSocketsBlocked');
                     DetectRTC.checkWebSocketsSupport(function() {
-                        tr.querySelectorAll('td')[1].innerHTML = printVal(DetectRTC.isWebSocketsBlocked);
+                        tr.querySelectorAll('td')[2].innerHTML = printVal(DetectRTC.isWebSocketsBlocked);
                     });
 
                     appendTR('Browser Supports WebAudio API?', printVal(DetectRTC.isAudioContextSupported), 'isAudioContextSupported');
