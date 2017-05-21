@@ -13,8 +13,7 @@
         "url": "https://github.com/muaz-khan/DetectRTC.git"
     },
     "scripts": {
-        "start": "node server.js",
-        /*"test": "node npm-test.js"*/
+        "start": "node server.js"
     },
     "main": "DetectRTC.js",
     "keywords": [
