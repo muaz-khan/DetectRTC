@@ -43,8 +43,11 @@ DetectRTC.isMediaHintsSupportsNewSyntax
 ```
 node server.js
 
+# or
+npm start
+
 # and open:
-127.0.0.1:9001
+http://127.0.0.1:9001
 
 # or
 http://localhost:9001
@@ -69,6 +72,10 @@ Or try `npm-test.js`:
 ```
 cd node_modules
 cd detectrtc
+
+npm test
+
+# or
 node npm-test.js
 ```
 

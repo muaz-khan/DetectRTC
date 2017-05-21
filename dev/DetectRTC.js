@@ -42,7 +42,7 @@ if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 35) {
 }
 
 if (!/^(https:|chrome-extension:)$/g.test(location.protocol || '')) {
-    if (document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
+    if (typeof document !== 'undefined' && typeof document.domain === 'string' && document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
         // DetectRTC.browser.isChrome
         isScreenCapturingSupported = false;
     }
@@ -106,7 +106,7 @@ if (navigator.getUserMedia) {
 }
 
 if (DetectRTC.browser.isChrome && DetectRTC.browser.version >= 46 && !/^(https:|chrome-extension:)$/g.test(location.protocol || '')) {
-    if (document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
+    if (typeof document !== 'undefined' && typeof document.domain === 'string' && document.domain.search && document.domain.search(/localhost|127.0./g) === -1) {
         isGetUserMediaSupported = 'Requires HTTPs';
     }
 }
@@ -189,7 +189,7 @@ DetectRTC.videoInputDevices = videoInputDevices;
 
 // ------
 var isSetSinkIdSupported = false;
-if ('setSinkId' in document.createElement('video')) {
+if (typeof document !== 'undefined' && typeof document.createElement === 'function' && 'setSinkId' in document.createElement('video')) {
     isSetSinkIdSupported = true;
 }
 DetectRTC.isSetSinkIdSupported = isSetSinkIdSupported;
