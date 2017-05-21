@@ -175,7 +175,13 @@ DetectRTC.load = function(callback) {
     checkDeviceSupport(callback);
 };
 
-DetectRTC.MediaDevices = MediaDevices;
+
+if (typeof MediaDevices !== 'undefined') {
+    DetectRTC.MediaDevices = MediaDevices;
+} else {
+    DetectRTC.MediaDevices = [];
+}
+
 DetectRTC.hasMicrophone = hasMicrophone;
 DetectRTC.hasSpeakers = hasSpeakers;
 DetectRTC.hasWebcam = hasWebcam;

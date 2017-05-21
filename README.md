@@ -73,8 +73,7 @@ Or try `npm-test.js`:
 cd node_modules
 cd detectrtc
 
-npm test
-
+# npm test
 # or
 node npm-test.js
 ```
@@ -214,7 +213,8 @@ git clone --depth=50 --branch=development git://github.com/muaz-khan/DetectRTC.g
 [sudo] npm install grunt
 
 # verify your changes
-npm test  # or "grunt"
+# npm test  # or "grunt"
+grunt
 
 # Success? Make a pull request!
 ```

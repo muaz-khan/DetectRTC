@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2017-05-21 3:58:52 AM UTC
+// Last Updated On: 2017-05-21 5:10:21 AM UTC
 
 // ________________
 // DetectRTC v1.3.4
@@ -984,7 +984,13 @@
         checkDeviceSupport(callback);
     };
 
-    DetectRTC.MediaDevices = MediaDevices;
+
+    if (typeof MediaDevices !== 'undefined') {
+        DetectRTC.MediaDevices = MediaDevices;
+    } else {
+        DetectRTC.MediaDevices = [];
+    }
+
     DetectRTC.hasMicrophone = hasMicrophone;
     DetectRTC.hasSpeakers = hasSpeakers;
     DetectRTC.hasWebcam = hasWebcam;

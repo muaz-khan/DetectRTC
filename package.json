@@ -14,7 +14,7 @@
     },
     "scripts": {
         "start": "node server.js",
-        "test": "node npm-test.js"
+        /*"test": "node npm-test.js"*/
     },
     "main": "DetectRTC.js",
     "keywords": [
