@@ -73,6 +73,7 @@ module.exports = function(grunt) {
         jsbeautifier: {
             files: [
                 'dev/*.js',
+                'test/*.js',
                 'DetectRTC.js',
                 'Gruntfile.js'
             ],

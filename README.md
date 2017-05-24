@@ -1,17 +1,47 @@
 # DetectRTC | Is WebRTC Supported In Your Browser?
 
+[![npm](https://img.shields.io/npm/v/detectrtc.svg)](https://npmjs.org/package/detectrtc) [![downloads](https://img.shields.io/npm/dm/detectrtc.svg)](https://npmjs.org/package/detectrtc)  [![Build Status: Linux](https://travis-ci.org/muaz-khan/DetectRTC.png?branch=master)](https://travis-ci.org/muaz-khan/DetectRTC) <a href="https://www.browserstack.com"><img src="https://webrtcweb.com/browserstack.svg" height="20px" /></a>
+
 ### Live Demo: https://www.webrtc-experiment.com/DetectRTC/
 
-[![npm](https://img.shields.io/npm/v/detectrtc.svg)](https://npmjs.org/package/detectrtc) [![downloads](https://img.shields.io/npm/dm/detectrtc.svg)](https://npmjs.org/package/detectrtc)  [![Build Status: Linux](https://travis-ci.org/muaz-khan/DetectRTC.png?branch=master)](https://travis-ci.org/muaz-khan/DetectRTC)
+```javascript
+if (DetectRTC.isWebRTCSupported === false) {
+    alert('Please use Chrome or Firefox.');
+}
 
-* [Check all DetectRTC releases](https://github.com/muaz-khan/DetectRTC/releases)
+if (DetectRTC.hasWebcam === false) {
+    alert('Please install an external webcam device.');
+}
+
+if (DetectRTC.hasMicrophone === false) {
+    alert('Please install an external microphone device.');
+}
+
+if (DetectRTC.hasSpeakers === false && (DetectRTC.broser.name === 'Chrome' || DetectRTC.broser.name === 'Edge')) {
+    alert('Oops, your system can not play audios.');
+}
+```
+
+## What is this?
 
 A tiny JavaScript library that can be used to detect WebRTC features e.g. system having speakers, microphone or webcam, screen capturing is supported, number of audio/video devices etc.
 
+## Free?
+
 It is <a href="https://www.webrtc-experiment.com/licence/">MIT Licenced</a>, which means that you can use it in any commercial/non-commercial product, free of cost.
 
+## Tests?
+
+* https://travis-ci.org/muaz-khan/DetectRTC
+
+## Releases?
+
+* https://github.com/muaz-khan/DetectRTC/releases
+
+## How to install?
+
 ```
-npm install detectrtc
+npm install detectrtc --production
 
 # or via "bower"
 bower install detectrtc
@@ -38,9 +68,9 @@ DetecRTC.browser.googSupportedFlags.echoCancellation
 DetectRTC.isMediaHintsSupportsNewSyntax
 ```
 
-# Test in LocalHost
+# LocalHost
 
-```
+```sh
 node server.js
 
 # or
@@ -53,7 +83,7 @@ http://127.0.0.1:9001
 http://localhost:9001
 ```
 
-# Test on NPM
+# NPM
 
 ```javascript
 var DetectRTC = require('detectrtc');
@@ -69,7 +99,7 @@ DetectRTC.load(function() {
 
 Or try `npm-test.js`:
 
-```
+```sh
 cd node_modules
 cd detectrtc
 
@@ -78,7 +108,7 @@ cd detectrtc
 node npm-test.js
 ```
 
-# How to link?
+# How to link the script?
 
 ```html
 <script src="./node_modules/detectrtc/DetectRTC.js"></script>
@@ -111,46 +141,46 @@ var DetectRTC = require('detectrtc');
 // below code will work for all users
 
 DetectRTC.load(function() {
-    DetectRTC.hasWebcam (has webcam device!)
-    DetectRTC.hasMicrophone (has microphone device!)
-    DetectRTC.hasSpeakers (has speakers!)
-    DetectRTC.isScreenCapturingSupported
-    DetectRTC.isSctpDataChannelsSupported
-    DetectRTC.isRtpDataChannelsSupported
-    DetectRTC.isAudioContextSupported
-    DetectRTC.isWebRTCSupported
-    DetectRTC.isDesktopCapturingSupported
-    DetectRTC.isMobileDevice
+    DetectRTC.hasWebcam; // (has webcam device!)
+    DetectRTC.hasMicrophone; // (has microphone device!)
+    DetectRTC.hasSpeakers; // (has speakers!)
+    DetectRTC.isScreenCapturingSupported;
+    DetectRTC.isSctpDataChannelsSupported;
+    DetectRTC.isRtpDataChannelsSupported;
+    DetectRTC.isAudioContextSupported;
+    DetectRTC.isWebRTCSupported;
+    DetectRTC.isDesktopCapturingSupported;
+    DetectRTC.isMobileDevice;
 
-    DetectRTC.isWebSocketsSupported
-    DetectRTC.isWebSocketsBlocked
-    DetectRTC.checkWebSocketsSupport(callback)
+    DetectRTC.isWebSocketsSupported;
+    DetectRTC.isWebSocketsBlocked;
+    DetectRTC.checkWebSocketsSupport(callback);
 
-    DetectRTC.isWebsiteHasWebcamPermissions        // getUserMedia allowed for HTTPs domain in Chrome?
-    DetectRTC.isWebsiteHasMicrophonePermissions    // getUserMedia allowed for HTTPs domain in Chrome?
+    DetectRTC.isWebsiteHasWebcamPermissions;        // getUserMedia allowed for HTTPs domain in Chrome?
+    DetectRTC.isWebsiteHasMicrophonePermissions;    // getUserMedia allowed for HTTPs domain in Chrome?
 
-    DetectRTC.audioInputDevices    // microphones
-    DetectRTC.audioOutputDevices   // speakers
-    DetectRTC.videoInputDevices    // cameras
+    DetectRTC.audioInputDevices;    // microphones
+    DetectRTC.audioOutputDevices;   // speakers
+    DetectRTC.videoInputDevices;    // cameras
 
-    DetectRTC.osName
-    DetectRTC.osVersion
+    DetectRTC.osName;
+    DetectRTC.osVersion;
 
-    DetectRTC.browser.name === 'Edge' || 'Chrome' || 'Firefox'
-    DetectRTC.browser.version
-    DetectRTC.browser.isChrome
-    DetectRTC.browser.isFirefox
-    DetectRTC.browser.isOpera
-    DetectRTC.browser.isIE
-    DetectRTC.browser.isSafari
-    DetectRTC.browser.isEdge
+    DetectRTC.browser.name === 'Edge' || 'Chrome' || 'Firefox';
+    DetectRTC.browser.version;
+    DetectRTC.browser.isChrome;
+    DetectRTC.browser.isFirefox;
+    DetectRTC.browser.isOpera;
+    DetectRTC.browser.isIE;
+    DetectRTC.browser.isSafari;
+    DetectRTC.browser.isEdge;
 
-    DetectRTC.browser.isPrivateBrowsing // incognito or private modes
+    DetectRTC.browser.isPrivateBrowsing; // incognito or private modes
 
-    DetectRTC.isCanvasSupportsStreamCapturing
-    DetectRTC.isVideoSupportsStreamCapturing
+    DetectRTC.isCanvasSupportsStreamCapturing;
+    DetectRTC.isVideoSupportsStreamCapturing;
 
-    DetectRTC.DetectLocalIPAddress(callback)
+    DetectRTC.DetectLocalIPAddress(callback);
 });
 ```
 
@@ -202,15 +232,16 @@ For further tricks & usages:
 
 # Rules to Contribute
 
-```
-git clone --depth=50 --branch=development git://github.com/muaz-khan/DetectRTC.git muaz-khan/DetectRTC
-
-# install all dependencies
-[sudo] npm install
+```sh
+mkdir DetectRTC
+cd DetectRTC
+git clone git://github.com/muaz-khan/DetectRTC.git ./
 
 # install grunt for code style verifications
-[sudo] npm install grunt-cli
-[sudo] npm install grunt
+npm install grunt-cli
+
+# install all dependencies
+npm install --save-dev
 
 # verify your changes
 # npm test  # or "grunt"
@@ -222,6 +253,12 @@ grunt
 # Github
 
 * https://github.com/muaz-khan/DetectRTC
+
+# Tests powered by
+
+* Check tests here: https://travis-ci.org/muaz-khan/DetectRTC
+
+<a href="https://www.browserstack.com"><img src="https://webrtcweb.com/browserstack.svg" height="32px" /></a>
 
 # License
 
