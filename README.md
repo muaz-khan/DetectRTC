@@ -17,7 +17,7 @@ if (DetectRTC.hasMicrophone === false) {
     alert('Please install an external microphone device.');
 }
 
-if (DetectRTC.hasSpeakers === false && (DetectRTC.broser.name === 'Chrome' || DetectRTC.broser.name === 'Edge')) {
+if (DetectRTC.hasSpeakers === false && (DetectRTC.browser.name === 'Chrome' || DetectRTC.browser.name === 'Edge')) {
     alert('Oops, your system can not play audios.');
 }
 ```
@@ -195,7 +195,7 @@ If you're not detecting audio/video input/outupt devices then you can skip this 
 Demo: [https://jsfiddle.net/cf90az9q/](https://jsfiddle.net/cf90az9q/)
 
 ```html
-<script src="https://cdn.webrtc-experiment.com/DetectRTC/checkDeviceSupport.js"></script>
+<script src="https://cdn.webrtc-experiment.com/DetectRTC/CheckDeviceSupport.js"></script>
 <script>
 function selectSecondaryCamera() {
     checkDeviceSupport(function() {
@@ -256,9 +256,9 @@ grunt
 
 # Tests powered by
 
-* Check tests here: https://travis-ci.org/muaz-khan/DetectRTC
-
 <a href="https://www.browserstack.com"><img src="https://webrtcweb.com/browserstack.svg" height="32px" /></a>
+
+**Check tests here:** https://travis-ci.org/muaz-khan/DetectRTC
 
 # License
 
