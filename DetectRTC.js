@@ -1,9 +1,9 @@
 'use strict';
 
-// Last Updated On: 2017-05-24 4:28:17 PM UTC
+// Last Updated On: 2017-08-09 9:59:34 PM UTC
 
 // ________________
-// DetectRTC v1.3.4
+// DetectRTC v1.3.5
 
 // Open-Sourced: https://github.com/muaz-khan/DetectRTC
 
@@ -697,6 +697,10 @@
         audioInputDevices = [];
         audioOutputDevices = [];
         videoInputDevices = [];
+
+        hasMicrophone = false;
+        hasSpeakers = false;
+        hasWebcam = false;
 
         isWebsiteHasMicrophonePermissions = false;
         isWebsiteHasWebcamPermissions = false;
