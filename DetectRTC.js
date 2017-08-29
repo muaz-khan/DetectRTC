@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2017-08-12 5:13:41 AM UTC
+// Last Updated On: 2017-08-28 11:28:27 PM UTC
 
 // ________________
 // DetectRTC v1.3.5
@@ -107,11 +107,17 @@
                 majorVersion = 0;
             }
         }
-        // In MSIE, the true version is after 'MSIE' in userAgent
+        // In MSIE version <=10, the true version is after 'MSIE' in userAgent
+        // In IE 11, look for the string after 'rv:'
         else if (isIE) {
-            verOffset = nAgt.indexOf('MSIE');
+            verOffset = nAgt.indexOf('rv:');
+            if (verOffset > 0) { //IE 11
+                fullVersion = nAgt.substring(verOffset + 3);
+            } else { //IE 10 or earlier
+                verOffset = nAgt.indexOf('MSIE');
+                fullVersion = nAgt.substring(verOffset + 5);
+            }
             browserName = 'IE';
-            fullVersion = nAgt.substring(verOffset + 5);
         }
         // In Chrome, the true version is after 'Chrome' 
         else if (isChrome) {
@@ -152,12 +158,8 @@
             fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
         }
 
-        // trim the fullVersion string at semicolon/space if present
-        if ((ix = fullVersion.indexOf(';')) !== -1) {
-            fullVersion = fullVersion.substring(0, ix);
-        }
-
-        if ((ix = fullVersion.indexOf(' ')) !== -1) {
+        // trim the fullVersion string at semicolon/space/bracket if present
+        if ((ix = fullVersion.search(/[; \)]/)) !== -1) {
             fullVersion = fullVersion.substring(0, ix);
         }
 
