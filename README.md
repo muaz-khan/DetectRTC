@@ -190,6 +190,48 @@ If you're not detecting audio/video input/outupt devices then you can skip this 
 
 `DetectRTC.load` simply makes sure that all devices are captured and valid result is set for relevant properties.
 
+# How to fix `Please invoke getUserMedia once.`?
+
+```javascript
+if (DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].label === 'Please invoke getUserMedia once.') {
+    navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true
+    }).then(function(stream) {
+        var video;
+        try {
+            video = document.createElement('video');
+            video.muted = true;
+            video.src = URL.createObjectURL(stream);
+            video.style.display = 'none';
+            (document.body || document.documentElement).appendChild(vide);
+        } catch (e) {}
+
+        DetectRTC.load(function() {
+            DetectRTC.videoInputDevices.forEach(function(device, idx) {
+                // ------------------------------
+                // now you get valid label here
+                console.log(device.label);
+                // ------------------------------
+            });
+
+            // release camera
+            stream.getTracks().forEach(function(track) {
+                track.stop();
+            });
+
+            if (video && video.parentNode) {
+                video.parentNode.removeChild(video);
+            }
+        });
+    });
+} else {
+    DetectRTC.videoInputDevices.forEach(function(device, idx) {
+        console.log(device.label);
+    });
+}
+```
+
 # How to use specific files?
 
 Demo: [https://jsfiddle.net/cf90az9q/](https://jsfiddle.net/cf90az9q/)

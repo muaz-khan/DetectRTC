@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2017-08-28 11:28:27 PM UTC
+// Last Updated On: 2017-08-31 6:52:39 AM UTC
 
 // ________________
 // DetectRTC v1.3.5
@@ -154,8 +154,8 @@
 
         if (isEdge) {
             browserName = 'Edge';
-            // fullVersion = navigator.userAgent.split('Edge/')[1];
-            fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
+            fullVersion = navigator.userAgent.split('Edge/')[1];
+            // fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
         }
 
         // trim the fullVersion string at semicolon/space/bracket if present
@@ -935,6 +935,16 @@
         displayResolution += '' + width + ' x ' + height;
     }
     DetectRTC.displayResolution = displayResolution;
+
+    function getAspectRatio(w, h) {
+        function gcd(a, b) {
+            return (b == 0) ? a : gcd(b, a % b);
+        }
+        var r = gcd(w, h);
+        return (w / r) / (h / r);
+    }
+
+    DetectRTC.displayAspectRatio = getAspectRatio(screen.width, screen.height).toFixed(2);
 
     // ----------
     DetectRTC.isCanvasSupportsStreamCapturing = isCanvasSupportsStreamCapturing;
