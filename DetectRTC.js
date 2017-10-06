@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2017-08-31 6:52:39 AM UTC
+// Last Updated On: 2017-10-06 7:53:56 PM UTC
 
 // ________________
 // DetectRTC v1.3.5
@@ -974,9 +974,15 @@
     DetectRTC.checkWebSocketsSupport = function(callback) {
         callback = callback || function() {};
         try {
+            var starttime;
             var websocket = new WebSocket('wss://echo.websocket.org:443/');
             websocket.onopen = function() {
                 DetectRTC.isWebSocketsBlocked = false;
+                starttime = (new Date).getTime();
+                websocket.send('ping');
+            };
+            websocket.onmessage = function() {
+                DetectRTC.WebsocketLatency = (new Date).getTime() - starttime + 'ms';
                 callback();
                 websocket.close();
                 websocket = null;
