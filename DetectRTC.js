@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2017-11-15 5:25:53 PM UTC
+// Last Updated On: 2017-11-19 2:09:51 PM UTC
 
 // ________________
 // DetectRTC v1.3.6
@@ -81,7 +81,7 @@
 
     var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
     var isFirefox = typeof window.InstallTrigger !== 'undefined';
-    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     var isChrome = !!window.chrome && !isOpera;
     var isIE = typeof document !== 'undefined' && !!document.documentMode && !isEdge;
 
@@ -128,11 +128,16 @@
         // In Safari, the true version is after 'Safari' or after 'Version' 
         else if (isSafari) {
             verOffset = nAgt.indexOf('Safari');
+
             browserName = 'Safari';
             fullVersion = nAgt.substring(verOffset + 7);
 
             if ((verOffset = nAgt.indexOf('Version')) !== -1) {
                 fullVersion = nAgt.substring(verOffset + 8);
+            }
+
+            if (navigator.userAgent.indexOf('Version/') !== -1) {
+                fullVersion = navigator.userAgent.split('Version/')[1].split(' ')[0];
             }
         }
         // In Firefox, the true version is after 'Firefox' 
