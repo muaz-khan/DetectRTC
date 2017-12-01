@@ -1,4 +1,4 @@
-<script>window.demoVersion = '2017.11.15';</script>
+<script>window.demoVersion = '2017.12.01';</script>
 
 <!--
 > Muaz Khan     - www.MuazKhan.com
@@ -77,7 +77,7 @@
             Script used to detect WebRTC features!
             https://github.com/muaz-khan/DetectRTC#how-to-link
         -->
-        <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script>
+        <script src="https://cdn.WebRTC-Experiment.com/DetectRTC.js"> </script>
         <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
         <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     </head>
@@ -110,7 +110,7 @@
 
             <section style="margin: 20px; text-align: center; color: red;">
                 <small id="demoVersion"></small>
-                <script>var date=new Date(window.demoVersion),month=date.toLocaleString("en-us",{month:"long"}),day=date.getUTCDate();day.toString().length<=9&&(day=day.toString().length == 1 ? "0"+day : day);var year=date.getUTCFullYear(); document.getElementById("demoVersion").innerHTML="Last Updated On: <time>"+month+" "+day+" "+year+"</time>";</script>
+                <script>var date=new Date(window.demoVersion),month=date.toLocaleString("en-us",{month:"long"}),day=date.getDate();day.toString().length<=9&&(day=day.toString().length == 1 ? "0"+day : day);var year=date.getFullYear(); document.getElementById("demoVersion").innerHTML="Last Updated On: <time>"+month+" "+day+" "+year+"</time>";</script>
             </section>
 
             <div class="github-stargazers"></div>
@@ -178,7 +178,7 @@
                         var labels = [];
                         DetectRTC.audioOutputDevices.forEach(function(device) {
 
-                           if(DetectRTC.browser.name === 'Edge' && device.label === 'Please invoke getUserMedia once.') {
+                           if(DetectRTC.browser.name === 'Edge' && device.isCustomLabel) {
                                 device.label = 'Microsoft Edge is unable to detect label for this speaker device.';
                            }
 
@@ -370,7 +370,7 @@ rtpSenders.replaceTrack(newTrack);';
                     reloadDetectRTC();
 
                     try {
-                        if(DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].label === 'Please invoke getUserMedia once.') {
+                        if(DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].isCustomLabel) {
                             navigator.mediaDevices.getUserMedia({audio: true, video: true}).then(function(stream) {
                                 var video;
                                 try {

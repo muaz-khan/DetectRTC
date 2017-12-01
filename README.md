@@ -190,10 +190,15 @@ If you're not detecting audio/video input/outupt devices then you can skip this 
 
 `DetectRTC.load` simply makes sure that all devices are captured and valid result is set for relevant properties.
 
-# How to fix `Please invoke getUserMedia once.`?
+# How to fix devices' labels?
+
+You need to check for `device.isCustomLabel` boolean. If this boolean is `true` then assume that DetectRTC given a custom label to the device.
+
+You must getUserMedia request whenever you find `isCustomLabel===true`. getUserMedia request will return valid device labels.
 
 ```javascript
-if (DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].label === 'Please invoke getUserMedia once.') {
+if (DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].isCustomLabel) {
+    // it seems that we did not make getUserMedia request yet
     navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true
