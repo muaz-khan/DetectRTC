@@ -112,11 +112,11 @@ function checkDeviceSupport(callback) {
                 device.isCustomLabel = true;
 
                 if (device.kind === 'videoinput') {
-                    device.label = 'Camera ' + (DetectRTC.videoInputDevices.length);
+                    device.label = 'Camera ' + (videoInputDevices.length + 1);
                 } else if (device.kind === 'audioinput') {
-                    device.label = 'Microphone ' + (DetectRTC.audioInputDevices.length);
+                    device.label = 'Microphone ' + (audioInputDevices.length + 1);
                 } else if (device.kind === 'audiooutput') {
-                    device.label = 'Speaker ' + (DetectRTC.audioOutputDevices.length);
+                    device.label = 'Speaker ' + (audioOutputDevices.length + 1);
                 } else {
                     device.label = 'Please invoke getUserMedia once.';
                 }
