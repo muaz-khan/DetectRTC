@@ -186,7 +186,7 @@ DetectRTC.load(function() {
 
 # Why `load` method?
 
-If you're not detecting audio/video input/outupt devices then you can skip this method.
+If you're not detecting audio/video input/output devices then you can skip this method.
 
 `DetectRTC.load` simply makes sure that all devices are captured and valid result is set for relevant properties.
 
