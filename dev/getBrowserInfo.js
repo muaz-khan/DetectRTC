@@ -4,7 +4,7 @@ var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOr
 
 var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 var isFirefox = typeof window.InstallTrigger !== 'undefined';
-var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent || '') && !(/CriOS/i.test(navigator.userAgent || '')) && !(/FxiOS/i.test(navigator.userAgent || ''));
 var isChrome = !!window.chrome && !isOpera;
 var isIE = typeof document !== 'undefined' && !!document.documentMode && !isEdge;
 
