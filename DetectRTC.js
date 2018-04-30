@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2017-12-09 2:29:22 PM UTC
+// Last Updated On: 2018-04-30 5:22:34 PM UTC
 
 // ________________
 // DetectRTC v1.3.6
@@ -1089,7 +1089,7 @@
         MediaStream = webkitMediaStream;
     }
 
-    if (typeof MediaStream !== 'undefined') {
+    if (typeof MediaStream !== 'undefined' && typeof MediaStream === 'function') {
         DetectRTC.MediaStream = Object.keys(MediaStream.prototype);
     } else DetectRTC.MediaStream = false;
 

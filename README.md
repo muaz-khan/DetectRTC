@@ -237,7 +237,7 @@ if (DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].isCustomLabel) {
 }
 ```
 
-# How to use specific files?
+# How to select specific camera?
 
 Demo: [https://jsfiddle.net/cf90az9q/](https://jsfiddle.net/cf90az9q/)
 
