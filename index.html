@@ -1,4 +1,4 @@
-<script>window.demoVersion = '2018.04.05';</script>
+<script>window.demoVersion = '2018.05.05';</script>
 
 <!--
 > Muaz Khan     - www.MuazKhan.com
@@ -77,7 +77,7 @@
             Script used to detect WebRTC features!
             https://github.com/muaz-khan/DetectRTC#how-to-link
         -->
-        <script src="https://cdn.WebRTC-Experiment.com/DetectRTC.js"> </script>
+        <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script>
         <script src="https://cdn.webrtc-experiment.com/screenshot.js"></script>
         <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     </head>
@@ -241,7 +241,7 @@
                     appendTR('Browser Supports WebAudio API?', printVal(DetectRTC.isAudioContextSupported), 'isAudioContextSupported');
                     appendTR('Browser Supports SCTP Data Channels?', printVal(DetectRTC.isSctpDataChannelsSupported), 'isSctpDataChannelsSupported');
                     appendTR('Browser Supports RTP Data Channels?', printVal(DetectRTC.isRtpDataChannelsSupported), 'isRtpDataChannelsSupported');
-                    appendTR('This page Supports Screen Capturing API?', printVal(DetectRTC.isScreenCapturingSupported), 'isScreenCapturingSupported');
+                    appendTR('This page Supports Screen Capturing API?' + getInfoDiv('infoIcon-isScreenCapturingSupported'), printVal(DetectRTC.isScreenCapturingSupported), 'isScreenCapturingSupported');
 
                     appendTR('Does Browser Support multi-monitor selection & capturing screen of any monitor?', printVal(DetectRTC.isMultiMonitorScreenCapturingSupported), 'isMultiMonitorScreenCapturingSupported');
 
@@ -292,6 +292,38 @@
                     // appendTR(DetectRTC.MediaStream === false ? 'Your system does NOT supports MediaStream.' : 'Your system supports MediaStream.', '<strong>MediaStream.prototype:</strong><br>' + DetectRTC.MediaStream.toString().split(',').join(', '), 'MediaStream');
                     // appendTR(DetectRTC.MediaStreamTrack === false ? 'Your system does NOT supports MediaStreamTrack.' : 'Your system supports MediaStreamTrack.', '<strong>MediaStreamTrack.prototype:</strong><br>' + DetectRTC.MediaStreamTrack.toString().split(',').join(', '), 'MediaStreamTrack');
                     // appendTR(DetectRTC.RTCPeerConnection === false ? 'Your system does NOT supports RTCPeerConnection API.' : 'Your system supports RTCPeerConnection API.', '<strong>RTCPeerConnection.prototype:</strong><br>' + DetectRTC.RTCPeerConnection.toString().split(',').join(', '), 'RTCPeerConnection');
+                    document.getElementById('infoIcon-isScreenCapturingSupported').onclick = function() {
+                        var pre = this.parentNode.querySelector('pre');
+                        if(pre) {
+                            pre.parentNode.removeChild(pre);
+                            return;
+                        }
+
+                        pre = document.createElement('pre');
+                        pre.className = 'sh_javascript inline-pre';
+                        pre.innerHTML += '\
+# Edge &gt= 17<br>\
+navigator.getDisplayMedia({<br>\
+    video: true<br>\
+}).then(screenStream => {<br>\
+    video.srcObject = screenStream;<br>\
+}, error => {<br>\
+    alert(error);<br>\
+});<br>\
+<br>\
+# Firefox<br>\
+navigator.mediaDevices.getUserMedia({<br>\
+    video: {<br>\
+        mediaSource: \'window\' || \'screen\'<br>\
+    }<br>\
+}).then(function(screenStream) {<br>\
+    video.srcObject = screenStream;<br>\
+});<br><br>\
+# Chrome+Opera desktopCapture API i.e. extension';
+                        this.parentNode.appendChild(pre);
+                        pre.focus();
+                        sh_highlightDocument();
+                    };
 
                     document.getElementById('infoIcon-set-sink-id').onclick = function() {
                         var pre = this.parentNode.querySelector('pre');
@@ -441,6 +473,10 @@ rtpSenders.replaceTrack(newTrack);';
                     return new Blob([uInt8Array], {
                         type: contentType
                     });
+                }
+
+                if(DetectRTC.version) {
+                    document.getElementById('welcome').innerHTML = 'DetectRTC v' + DetectRTC.version;
                 }
             </script>
 

@@ -126,7 +126,7 @@ node npm-test.js
 You can even link specific versions:
 
 ```html
-<script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.3.5/DetectRTC.js"></script>
+<script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.3.6/DetectRTC.js"></script>
 ```
 
 <img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
@@ -144,7 +144,7 @@ DetectRTC.load(function() {
     DetectRTC.hasWebcam; // (has webcam device!)
     DetectRTC.hasMicrophone; // (has microphone device!)
     DetectRTC.hasSpeakers; // (has speakers!)
-    DetectRTC.isScreenCapturingSupported;
+    DetectRTC.isScreenCapturingSupported; // Chrome, Firefox, Opera, Edge and Android
     DetectRTC.isSctpDataChannelsSupported;
     DetectRTC.isRtpDataChannelsSupported;
     DetectRTC.isAudioContextSupported;
@@ -184,9 +184,19 @@ DetectRTC.load(function() {
 });
 ```
 
+# `DetectRTC.version`
+
+DetectRTC is supporting `version` property since `1.3.6`.
+
+``javascript
+if(DetectRTC.version === '1.3.6') {
+    alert('We are using DetectRTC version 1.3.6');
+}
+```
+
 # Why `load` method?
 
-If you're not detecting audio/video input/outupt devices then you can skip this method.
+If you're not detecting audio/video input/output devices then you can skip this method.
 
 `DetectRTC.load` simply makes sure that all devices are captured and valid result is set for relevant properties.
 
