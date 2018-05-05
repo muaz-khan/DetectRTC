@@ -1,4 +1,4 @@
-<script>window.demoVersion = '2018.03.07';</script>
+<script>window.demoVersion = '2018.04.05';</script>
 
 <!--
 > Muaz Khan     - www.MuazKhan.com
@@ -322,16 +322,13 @@ if(secondarySpeakers) {<br>\
                         pre = document.createElement('pre');
                         pre.className = 'sh_javascript inline-pre';
                         pre.innerHTML += '\
-var secondaryCamera = DetectRTC.videoInputDevices[1];<br>\
-if(secondaryCamera) {<br>\
-   var videoConstraints = {<br>\
-       deviceId: secondaryCamera.deviceId<br>\
-   };<br>\
-<br>\
-   oldMediaStream.getVideoTracks().forEach(function(track) {<br>\
-       track.applyConstraints(videoConstraints); <br>\
-   });<br>\
-}';
+oldMediaStream.getVideoTracks().forEach(function(track) {<br>\
+    var videoConstraints = {<br>\
+        width: {min: 640, ideal: 1280},<br>\
+        height: {min: 480, ideal: 720},<br>\
+    };<br>\
+    track.applyConstraints(videoConstraints); <br>\
+});';
                         this.parentNode.appendChild(pre);
                         pre.focus();
                         sh_highlightDocument();
