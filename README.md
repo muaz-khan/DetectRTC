@@ -188,7 +188,7 @@ DetectRTC.load(function() {
 
 DetectRTC is supporting `version` property since `1.3.6`.
 
-``javascript
+```javascript
 if(DetectRTC.version === '1.3.6') {
     alert('We are using DetectRTC version 1.3.6');
 }
