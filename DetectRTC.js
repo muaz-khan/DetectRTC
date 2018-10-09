@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2018-05-05 12:25:07 PM UTC
+// Last Updated On: 2018-10-09 7:06:12 AM UTC
 
 // ________________
 // DetectRTC v1.3.6
@@ -510,17 +510,27 @@
         }
     });
 
+    const regexIpv4Local = /^(192\.168\.|169\.254\.|10\.|172\.(1[6-9]|2\d|3[01]))/,
+        regexIpv4 = /([0-9]{1,3}(\.[0-9]{1,3}){3})/,
+        regexIpv6 = /[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7}/;
+
     // via: https://github.com/diafygi/webrtc-ips
     function DetectLocalIPAddress(callback, stream) {
         if (!DetectRTC.isWebRTCSupported) {
             return;
         }
 
+        var isPublic = true,
+            isIpv4 = true;
         getIPs(function(ip) {
-            if (ip.match(/^(192\.168\.|169\.254\.|10\.|172\.(1[6-9]|2\d|3[01]))/)) {
-                callback('Local: ' + ip);
+            if (ip.match(regexIpv4Local)) {
+                isPublic = false;
+                callback('Local: ' + ip, isPublic, isIpv4);
+            } else if (ip.match(regexIpv6)) { //via https://ourcodeworld.com/articles/read/257/how-to-get-the-client-ip-address-with-javascript-only
+                isIpv4 = false;
+                callback('Public: ' + ip, isPublic, isIpv4);
             } else {
-                callback('Public: ' + ip);
+                callback('Public: ' + ip, isPublic, isIpv4);
             }
         }, stream);
     }
@@ -575,15 +585,16 @@
         }
 
         function handleCandidate(candidate) {
-            var ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-            var match = ipRegex.exec(candidate);
+            var match = regexIpv4.exec(candidate);
             if (!match) {
                 return;
             }
             var ipAddress = match[1];
+            const isPublic = (candidate.match(regexIpv4Local)),
+                isIpv4 = true;
 
             if (ipDuplicates[ipAddress] === undefined) {
-                callback(ipAddress);
+                callback(ipAddress, isPublic, isIpv4);
             }
 
             ipDuplicates[ipAddress] = true;

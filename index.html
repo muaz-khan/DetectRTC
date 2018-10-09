@@ -1,4 +1,4 @@
-<script>window.demoVersion = '2018.09.15';</script>
+<script>window.demoVersion = '2018.10.09';</script>
 
 <!--
 > Muaz Khan     - www.MuazKhan.com
@@ -279,7 +279,8 @@
                     };
 
                     function detectIpAddresses(stream) {
-                        DetectRTC.DetectLocalIPAddress(function(ipAddress) {
+                        DetectRTC.DetectLocalIPAddress(function(ipAddress, isPublic, isIpv4) {
+                            // console.log(ipAddress, isPublic, isIpv4);
                             if (ipAddress.indexOf('Local') !== -1) {
                                 appendTR('Your <strong>Local</strong> IP Address', ipAddress);
                             } else {

@@ -1,7 +1,6 @@
-
 const regexIpv4Local = /^(192\.168\.|169\.254\.|10\.|172\.(1[6-9]|2\d|3[01]))/,
-      regexIpv4 = /([0-9]{1,3}(\.[0-9]{1,3}){3})/,
-      regexIpv6 = /[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
+    regexIpv4 = /([0-9]{1,3}(\.[0-9]{1,3}){3})/,
+    regexIpv6 = /[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7}/;
 
 // via: https://github.com/diafygi/webrtc-ips
 function DetectLocalIPAddress(callback, stream) {
@@ -80,7 +79,7 @@ function getIPs(callback, stream) {
         }
         var ipAddress = match[1];
         const isPublic = (candidate.match(regexIpv4Local)),
-              isIpv4 = true;
+            isIpv4 = true;
 
         if (ipDuplicates[ipAddress] === undefined) {
             callback(ipAddress, isPublic, isIpv4);
