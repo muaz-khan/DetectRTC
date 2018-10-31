@@ -529,7 +529,9 @@
         var isPublic = true,
             isIpv4 = true;
         getIPs(function(ip) {
-            if (ip.match(regexIpv4Local)) {
+            if (! ip) {
+                callback(null, null, null); //Indicate that ice-gathering has finished.
+            } else if (ip.match(regexIpv4Local)) {
                 isPublic = false;
                 callback('Local: ' + ip, isPublic, isIpv4);
             } else if (ip.match(regexIpv6)) { //via https://ourcodeworld.com/articles/read/257/how-to-get-the-client-ip-address-with-javascript-only
@@ -591,6 +593,9 @@
         }
 
         function handleCandidate(candidate) {
+            if (! candidate) {
+                callback(null, null, null); //Indicate to client that ice-gathering has finished.
+            }
             var match = regexIpv4.exec(candidate);
             if (!match) {
                 return;
@@ -608,9 +613,17 @@
 
         // listen for candidate events
         pc.onicecandidate = function(ice) {
-            if (ice.candidate) {
-                handleCandidate(ice.candidate.candidate);
+            //If ice.candidate is null, that indicates that candidate-gathering has finished. This state is useful to clients, so pass
+            // null to handleCandidate to indicate this.
+            // See https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/onicecandidate#Value
+            var candidate = null;
+            try { //No need to propagate NullPointerException if ice.candidate doesn't provide a "candidate" property.
+                if (ice.candidate != null) {
+                    candidate =  ice.candidate.candidate;
+                }
+            } catch(ex) {
             }
+            handleCandidate(candidate);
         };
 
         // create data channel
