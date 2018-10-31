@@ -11,7 +11,9 @@ function DetectLocalIPAddress(callback, stream) {
     var isPublic = true,
         isIpv4 = true;
     getIPs(function(ip) {
-        if (ip.match(regexIpv4Local)) {
+        if (!ip) {
+            callback(); // Pass nothing to tell that ICE-gathering-ended
+        } else if (ip.match(regexIpv4Local)) {
             isPublic = false;
             callback('Local: ' + ip, isPublic, isIpv4);
         } else if (ip.match(regexIpv6)) { //via https://ourcodeworld.com/articles/read/257/how-to-get-the-client-ip-address-with-javascript-only
@@ -73,6 +75,11 @@ function getIPs(callback, stream) {
     }
 
     function handleCandidate(candidate) {
+        if (!candidate) {
+            callback(); // Pass nothing to tell that ICE-gathering-ended
+            return;
+        }
+
         var match = regexIpv4.exec(candidate);
         if (!match) {
             return;
@@ -89,9 +96,11 @@ function getIPs(callback, stream) {
     }
 
     // listen for candidate events
-    pc.onicecandidate = function(ice) {
-        if (ice.candidate) {
-            handleCandidate(ice.candidate.candidate);
+    pc.onicecandidate = function(event) {
+        if (event.candidate && event.candidate.candidate) {
+            handleCandidate(event.candidate.candidate);
+        } else {
+            handleCandidate(); // Pass nothing to tell that ICE-gathering-ended
         }
     };
 
