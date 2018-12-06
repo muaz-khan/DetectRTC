@@ -126,7 +126,7 @@ function getIPs(callback, stream) {
         var lines = pc.localDescription.sdp.split('\n');
 
         lines.forEach(function(line) {
-            if (line.indexOf('a=candidate:') === 0) {
+            if (line && line.indexOf('a=candidate:') === 0) {
                 handleCandidate(line);
             }
         });

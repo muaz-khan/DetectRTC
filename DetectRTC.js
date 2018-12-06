@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2018-10-31 5:21:01 AM UTC
+// Last Updated On: 2018-12-06 11:13:55 AM UTC
 
 // ________________
 // DetectRTC v1.3.8
@@ -644,7 +644,7 @@
             var lines = pc.localDescription.sdp.split('\n');
 
             lines.forEach(function(line) {
-                if (line.indexOf('a=candidate:') === 0) {
+                if (line && line.indexOf('a=candidate:') === 0) {
                     handleCandidate(line);
                 }
             });
