@@ -1,3 +1,5 @@
+**Disclaimer:** [https://www.webrtc-experiment.com/disclaimer/](https://www.webrtc-experiment.com/disclaimer/)
+
 <a href="https://github.com/muaz-khan/DetectRTC"><img alt="DetectRTC" src="https://webrtcweb.com/DetectRTC/icon.png" /> DetectRTC.js</a>
 
 # DetectRTC | Is WebRTC Supported In Your Browser?
