@@ -1,5 +1,3 @@
-**Disclaimer:** [https://www.webrtc-experiment.com/disclaimer/](https://www.webrtc-experiment.com/disclaimer/)
-
 <a href="https://github.com/muaz-khan/DetectRTC"><img alt="DetectRTC" src="https://webrtcweb.com/DetectRTC/icon.png" /> DetectRTC.js</a>
 
 # DetectRTC | Is WebRTC Supported In Your Browser?
@@ -322,6 +320,12 @@ grunt
 <a href="https://www.browserstack.com"><img src="https://webrtcweb.com/browserstack.svg" height="32px" /></a>
 
 **Check tests here:** https://travis-ci.org/muaz-khan/DetectRTC
+
+# Disclaimer
+
+There is no warranty, expressed or implied, associated with this product. Use at your own risk.
+
+* https://www.webrtc-experiment.com/disclaimer/
 
 # License
 
