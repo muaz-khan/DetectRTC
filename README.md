@@ -24,8 +24,6 @@ if (DetectRTC.hasSpeakers === false && (DetectRTC.browser.name === 'Chrome' || D
 }
 ```
 
-<a target="_blank" href="https://chrome.google.com/webstore/detail/detectrtc/infnkpmpcmmofkmndpheeplkcghgdjbf">![Try it now in CWS](https://raw.github.com/GoogleChrome/chrome-app-samples/master/tryitnowbutton.png "Click here to install this extension from the Chrome Web Store")</a>
-
 ## What is this?
 
 A tiny JavaScript library that can be used to detect WebRTC features e.g. system having speakers, microphone or webcam, screen capturing is supported, number of audio/video devices etc.
