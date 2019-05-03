@@ -1,8 +1,8 @@
-<a href="https://github.com/muaz-khan/DetectRTC"><img alt="DetectRTC" src="https://webrtcweb.com/DetectRTC/icon.png" /> DetectRTC.js</a>
+<a href="https://github.com/muaz-khan/DetectRTC"><img alt="DetectRTC" src="https://cdn.webrtc-experiment.com/images/DetectRTC-icon.png" /> DetectRTC.js</a>
 
 # DetectRTC | Is WebRTC Supported In Your Browser?
 
-[![npm](https://img.shields.io/npm/v/detectrtc.svg)](https://npmjs.org/package/detectrtc) [![downloads](https://img.shields.io/npm/dm/detectrtc.svg)](https://npmjs.org/package/detectrtc)  [![Build Status: Linux](https://travis-ci.org/muaz-khan/DetectRTC.png?branch=master)](https://travis-ci.org/muaz-khan/DetectRTC) <a href="https://www.browserstack.com"><img src="https://webrtcweb.com/browserstack.svg" height="20px" /></a>
+[![npm](https://img.shields.io/npm/v/detectrtc.svg)](https://npmjs.org/package/detectrtc) [![downloads](https://img.shields.io/npm/dm/detectrtc.svg)](https://npmjs.org/package/detectrtc)  [![Build Status: Linux](https://travis-ci.org/muaz-khan/DetectRTC.png?branch=master)](https://travis-ci.org/muaz-khan/DetectRTC) <a href="https://www.browserstack.com"><img src="https://3fxtqy18kygf3on3bu39kh93-wpengine.netdna-ssl.com/wp-content/themes/browserstack/img/browserstack-logo.svg" height="20px" /></a>
 
 ### Live Demo: https://www.webrtc-experiment.com/DetectRTC/
 
@@ -315,7 +315,7 @@ grunt
 
 # Tests powered by
 
-<a href="https://www.browserstack.com"><img src="https://webrtcweb.com/browserstack.svg" height="32px" /></a>
+<a href="https://www.browserstack.com"><img src="https://3fxtqy18kygf3on3bu39kh93-wpengine.netdna-ssl.com/wp-content/themes/browserstack/img/browserstack-logo.svg" height="32px" /></a>
 
 **Check tests here:** https://travis-ci.org/muaz-khan/DetectRTC
 
