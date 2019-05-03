@@ -1,6 +1,6 @@
 'use strict';
 
-// Last Updated On: 2019-02-27 10:23:56 AM UTC
+// Last Updated On: 2019-05-03 5:27:06 AM UTC
 
 // ________________
 // DetectRTC v1.3.9
