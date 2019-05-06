@@ -1,4 +1,4 @@
-<a href="https://github.com/muaz-khan/DetectRTC"><img alt="DetectRTC" src="https://cdn.webrtc-experiment.com/images/DetectRTC-icon.png" /> DetectRTC.js</a>
+<a href="https://github.com/muaz-khan/DetectRTC"><img alt="DetectRTC" src="https://www.webrtc-experiment.com/images/DetectRTC-icon.png" /> DetectRTC.js</a>
 
 # DetectRTC | Is WebRTC Supported In Your Browser?
 
@@ -118,11 +118,11 @@ node npm-test.js
 <!-- or bower -->
 <script src="./bower_components/detectrtc/DetectRTC.js"></script>
 
-<!-- or CDN link (suggested) -->
-<script src="https://cdn.webrtc-experiment.com/DetectRTC.js"></script>
-
 <!-- or RawGit (if CDN fails) -->
 <script src="https://cdn.rawgit.com/muaz-khan/DetectRTC/master/DetectRTC.js"></script>
+
+<!-- Not Recommended -->
+<script src="https://www.webrtc-experiment.com/DetectRTC.js"></script>
 ```
 
 You can even link specific versions:
@@ -131,7 +131,7 @@ You can even link specific versions:
 <script src="https://github.com/muaz-khan/DetectRTC/releases/download/1.3.6/DetectRTC.js"></script>
 ```
 
-<img src="https://cdn.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
+<img src="https://www.webrtc-experiment.com/images/DetectRTC.png" style="width:100%;" />
 
 # How to use it?
 
@@ -254,7 +254,7 @@ if (DetectRTC.MediaDevices[0] && DetectRTC.MediaDevices[0].isCustomLabel) {
 Demo: [https://jsfiddle.net/cf90az9q/](https://jsfiddle.net/cf90az9q/)
 
 ```html
-<script src="https://cdn.webrtc-experiment.com/DetectRTC/CheckDeviceSupport.js"></script>
+<script src="https://www.webrtc-experiment.com/DetectRTC/CheckDeviceSupport.js"></script>
 <script>
 function selectSecondaryCamera() {
     checkDeviceSupport(function() {
