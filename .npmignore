@@ -4,6 +4,7 @@
 # but not these files...
 !DetectRTC.js
 !DetectRTC.min.js
+!DetectRTC.d.ts
 !index.html
 !package.json
 !npm-test.js

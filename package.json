@@ -17,6 +17,7 @@
         "test": "./node_modules/.bin/protractor test/browserstack.config.js"
     },
     "main": "DetectRTC.js",
+    "types": "DetectRTC.d.ts",
     "keywords": [
         "webrtc",
         "detectrtc",
