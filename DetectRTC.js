@@ -468,7 +468,9 @@
             case 'iOS':
                 if (/OS (\d+)_(\d+)_?(\d+)?/.test(nAgt)) {
                     osVersion = /OS (\d+)_(\d+)_?(\d+)?/.exec(nVer);
-                    osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                    if (osVersion && osVersion.length > 3) {
+                        osVersion = osVersion[1] + '.' + osVersion[2] + '.' + (osVersion[3] | 0);
+                    }
                 }
                 break;
         }
