@@ -7,7 +7,7 @@ interface Device {
   label: string;
 }
 
-namespace DetectRTC {
+declare namespace DetectRTC {
   export function load(callback: () => void): void;
   export const version: string;
   export const osName: string;
