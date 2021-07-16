@@ -21,7 +21,7 @@ declare namespace DetectRTC {
   export const isAudioContextSupported: boolean;
   export const isCanvasSupportsStreamCapturing: boolean;
   export const isCreateMediaStreamSourceSupported: boolean;
-  export const isGetUserMediaSupported: boolean;
+  export const isGetUserMediaSupported: boolean | string; // can be 'Requires HTTPs'
   export const isMobileDevice: boolean;
   export const isMultiMonitorScreenCapturingSupported: boolean;
   export const isORTCSupported: boolean;
