@@ -66,7 +66,7 @@ DetectRTC.videoInputDevices    // (implemented)
 
 // Below API are NOT implemented yet
 DetectRTC.browser.googSupportedFlags.googDAEEchoCancellation
-DetecRTC.browser.googSupportedFlags.echoCancellation
+DetectRTC.browser.googSupportedFlags.echoCancellation
 DetectRTC.isMediaHintsSupportsNewSyntax
 ```
 
