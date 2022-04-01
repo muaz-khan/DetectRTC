@@ -42,7 +42,7 @@ declare namespace DetectRTC {
 
   export const isDesktopCapturingSupported: boolean;
 
-  export function checkWebSocketsSupport(callback: () => void);
+  export function checkWebSocketsSupport(callback: () => void): void;
 
   export const audioInputDevices: Device[]; // microphones
   export const audioOutputDevices: Device[]; // speakers
@@ -67,7 +67,7 @@ declare namespace DetectRTC {
 
   export function DetectLocalIPAddress(
     callback: (localIpAddress: string) => void
-  );
+  ): void;
 
   export const MediaDevices: Device[];
   export const MediaStream: string[];
