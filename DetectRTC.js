@@ -1021,7 +1021,7 @@
         callback = callback || function() {};
         try {
             var starttime;
-            var websocket = new WebSocket('wss://echo.websocket.org:443/');
+            var websocket = new WebSocket('wss://echo.websocket.events/.ws');
             websocket.onopen = function() {
                 DetectRTC.isWebSocketsBlocked = false;
                 starttime = (new Date).getTime();
