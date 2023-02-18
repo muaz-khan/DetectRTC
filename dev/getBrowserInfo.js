@@ -1,11 +1,12 @@
 var isMobileDevice = !!(/Android|webOS|iPhone|iPad|iPod|BB10|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(navigator.userAgent || ''));
 
-var isEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);
+var isEdge = (navigator.userAgent.indexOf('Edge') !== -1 || navigator.userAgent.indexOf('Edg') !== -1); // Microsoft replaced 'Edge' by 'Edg' a while ago to avoid confusion with a legacy Edge browser.
+             // && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob);  commented out 2023-02-18: who has written this and why? Is it still needed?
 
 var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1 && ('netscape' in window) && / rv:/.test(navigator.userAgent);
 var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-var isChrome = !!window.chrome && !isOpera;
+var isChrome = !!window.chrome && !isEdge && !isOpera;
 var isIE = typeof document !== 'undefined' && !!document.documentMode && !isEdge;
 
 // this one can also be used:
@@ -93,7 +94,7 @@ function getBrowserInfo() {
 
     if (isEdge) {
         browserName = 'Edge';
-        fullVersion = navigator.userAgent.split('Edge/')[1];
+        fullVersion = navigator.userAgent.split(/Edge?\//)[1];
         // fullVersion = parseInt(navigator.userAgent.match(/Edge\/(\d+).(\d+)$/)[2], 10).toString();
     }
 
